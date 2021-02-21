@@ -35,7 +35,6 @@
     <c:if test="${requestScope.errorMessage != null}">
         <div class="container-fluid">
             <h3 style="color:darkred"><c:out value="${requestScope.errorMessage}"/></h3>
-            <c:remove var="${requestScope.errorMessage}"/>
         </div>
     </c:if>
     <div class="container-fluid">

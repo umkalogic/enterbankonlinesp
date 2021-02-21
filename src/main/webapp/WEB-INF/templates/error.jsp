@@ -2,14 +2,15 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib uri="http://example.com/functions" prefix="f" %>
-<%@ taglib prefix="fmr" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page isELIgnored="false" %>
 
-<fmt:setLocale value="${sessionScope.lang}" scope="session"/>
+<c:set var="lang" value = "${not empty param.lang ? param.lang : pageContext.request.locale}"
+       scope="session" />
+<fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="messages" />
-<html>
+<!DOCTYPE html>
+<html lang="${param.lang}">
 <head>
     <title>Error page</title>
     <meta charset="utf-8"/>

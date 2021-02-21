@@ -9,7 +9,7 @@
 
 <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="messages" />
-<c:set var="prevpage" value="userhome" />
+<c:set var="prevpage" value="userhome" />>
 <html>
 
 <head>
@@ -24,9 +24,10 @@
 <body>
 <div class="container-fluid">
     <jsp:include page="../fragments/nav-language.jsp">
-        <jsp:param name="page" value="makepayment"/>
+        <jsp:param name="page" value="confirmpayment"/>
     </jsp:include>
 </div>
+
 <div class="container-fluid">
     <form action="controller" method="get">
         <button class="btn btn-md btn-dark btn-block"
@@ -40,41 +41,53 @@
     <div class="container-fluid">
         <h1><fmt:message key="title.payments"/></h1>
         <hr>
-        <h2><fmt:message key="title.create.payment"/></h2>
+        <h2><fmt:message key="title.send.payment"/></h2>
 
         <div class = "container">
             <form autocomplete="off" action="controller" method="POST" role="form">
-                <input type="hidden" name="id" value="${param.id}">
-
-                <span><fmt:message key="payment.from"/>:    ${param.bankaccountfrom}</span><br>
+                <input type="hidden" name="paymentid" value="${requestScope.paymentId}">
+                <input type="hidden" name="command" value="confirmpayment">
+                <span><fmt:message key="payment.from"/>:    ${requestScope.bankAccountFrom}</span><br>
                 <br>
                 <span><fmt:message key="payment.to"/>:    </span>
-                <input type="text" name="tobankaccount" required class="form-control mb-4 col-4">
+                <input type="text" name="tobankaccount" value="${requestScope.toBankAccount}" disabled class="form-control mb-4 col-4">
                 <br>
                 <span><fmt:message key="payment.paymentAmount"/>:    </span>
-                <input type="text" name="paymentamount" required value="0.00" class="form-control mb-4 col-4"
+                <input type="text" name="paymentamount" value="${requestScope.paymentAmount}" disabled class="form-control mb-4 col-4"
                        data-behaviour="decimal">
-<%--                <label th:if="${#fields.hasErrors('paymentAmount')}" th:errors="*{paymentAmount}"--%>
-<%--                       class="validation-message"></label>--%>
                 <br>
-                <button type="submit" name="command" value="confirmpayment" class="btn btn-info col-2"><fmt:message key="payment.create"/></button>
+                <button type="submit" class="btn btn-info col-2"><fmt:message key="payment.confirm"/></button>
+                <c:if test="${!requestScope.payment.isSent}">
+                <form action="controller" method="post" class="btn">
+                    <input type="hidden" name="command" value="deletepayment">
+                    <input type="hidden" name="id" value="${requestScope.payment.paymentId}">
+                    <c:set var="msg"><fmt:message key="message.confirm.delete"/></c:set>
+                    <button type="submit" onclick="return confirm(this.getAttribute(${msg}))" class="btn btn-danger">
+                        <fmt:message key="payment.delete.payment"/></button>
+                </form>
+                </c:if>
                 <br>
                 <br>
-                    <c:if test="${requestScope.errorMessage != null}">
+                <c:if test="${requestScope.errorMessage != null}">
                     <h2 class="text-danger"><fmt:message key="error.message"/></h2>
-                    </c:if>
+                </c:if>
+                <c:if test="${requestScope.successMessage != null}">
+                    <h2 class="text-danger"><fmt:message key="success.message"/></h2>
+                </c:if>
             </form>
+                <c:if test="${requestScope.stringInfo != null}">
+                    <p style="color:red;"><fmt:message key="stringinfo.something.went.wrong"/></p>
+                </c:if>
+
         </div>
-    <c:if test="${requestScope.stringInfo != null}">
-        <p  style="color:red;"><fmt:message key="stringinfo.something.went.wrong"/></p>
-    </c:if>
         <hr>
-        <a href="${pageContext.servletContext.contextPath}/controller?command=userhome"><fmt:message key="label.backtouserlist"/></a>
+        <a href = "${pageContext.servletContext.contextPath}/controller?command=userhome"><fmt:message key="label.backtouserlist" /></a>
     </div>
 </div>
 <script src="../../../static/js/jquery-3.2.1.slim.min.js"></script>
 <script src="../../../static/js/popper.min.js"></script>
 <script src="../../../static/bootstrap/bootstrap.min.js"></script>
 <script src="../../../static/js/enabledisable.js"></script>
+<script src="../../../static/js/sark-decimal.js"></script>
 </body>
 </html>

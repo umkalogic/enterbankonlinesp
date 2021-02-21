@@ -39,7 +39,6 @@
     <c:if test="${requestScope.errorMessage != null}">
         <div class="container-fluid">
             <h3 style="color:darkred"><c:out value="${requestScope.errorMessage}"/></h3>
-            <c:remove var="${requestScope.errorMessage}"/>
         </div>
         <br>
     </c:if>
@@ -92,14 +91,14 @@
                 <td><fmt:message key="${account.active ? 'account.enabled' : 'account.disabled'}"/></td>
                 <td>
                     <c:if test="${account.active and !account.enableRequest}">
-                        <form class="btn" action="${pageContext.servletContext.contextPath}/controller?command=showformforpayment" method="get">
+                        <form class="btn" action="controller" method="get">
                             <input type="hidden" name="id" value="${account.bankAccountId}" />
                             <input type="hidden" name="bankaccountfrom" value="${account.bankAccountNumber}">
-                            <button class="btn btn-warning" type="Submit"><fmt:message key="account.payment" /></button>
+                            <button name="command" value="showformforpayment" class="btn btn-warning" type="Submit"><fmt:message key="account.payment" /></button>
                         </form>
                     </c:if>
                     <c:if test="${account.active and !account.enableRequest}">
-                        <form class="btn" action="${pageContext.servletContext.contextPath}/controller?command=disableaccount" method="post">
+                        <form class="btn" action="controller?command=disableaccount" method="post">
                             <input type="hidden" name="id" value="${account.bankAccountId}" />
                             <c:set var="msg"><fmt:message key="message.disable.bank.account"/></c:set>
                             <button class="btn btn-danger" type="Submit"

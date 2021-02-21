@@ -31,7 +31,7 @@
 
         <form action="controller" method="POST"
               class="form" id="login_form" autocomplete="off">
-<%--            <input type="hidden" name="command" value="login"/>--%>
+            <input type="hidden" name="command" value="login"/>
             <h1 class="form-control"><fmt:message key="text.welcome" /></h1>
             <div class="form-group">
                 <input type="text" id="user_name" name="user_name" placeholder="<fmt:message key="label.login" />"
@@ -47,6 +47,7 @@
             </div>
             <div align="center">
                 <p style="font-size: 20px; color: #FF1C19;"><c:out value="${requestScope.errorMessage}" /></p>
+
             </div>
 
         </form>

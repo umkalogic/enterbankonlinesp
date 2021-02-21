@@ -70,7 +70,7 @@
   </init-param>
   <init-param>
     <param-name>user</param-name>
-    <param-value>userhome showaccounts payments showformforpayment disableaccount enableaccountrequest confirmpayment deletepayment</param-value>
+    <param-value>userhome payments showformforpayment disableaccount enableaccountrequest confirmpayment deletepayment</param-value>
   </init-param>
   <init-param>
     <param-name>all</param-name>
@@ -78,7 +78,7 @@
   </init-param>
   <init-param>
     <param-name>out-of-control</param-name>
-    <param-value>login changelang error</param-value>
+    <param-value>login changelang error nocommand</param-value>
   </init-param>
 </filter>
 

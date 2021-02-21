@@ -69,9 +69,9 @@ public class Controller extends HttpServlet {
         LOG.trace("Dispatching... {}", pageToDispatch);
 
         if (page.isRedirect()) {
-            response.setHeader("Cache-control", "no-cache");
-            response.setHeader("Cache-control", "no-control");
-            response.setHeader("Pragma", "no-cache");
+//            response.setHeader("Cache-control", "no-cache");
+//            response.setHeader("Cache-control", "no-control");
+//            response.setHeader("Pragma", "no-cache");
 
             LOG.trace("... redirect page... {}", pageToDispatch);
             response.sendRedirect(request.getContextPath() + pageToDispatch);
