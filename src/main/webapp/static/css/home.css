@@ -1,0 +1,45 @@
+.admin-message-text {
+    font-style: normal;
+    font-size: 22px;
+    color: #c82333;
+}
+.user-message-text {
+    font-style: normal;
+    font-size: 20px;
+    color: #144C18;
+}
+.table-header {
+    background-color: #144C18;
+}
+.thead-dark tr th a {
+    color: white;
+    text-decoration: underline;
+}
+.thead-dark tr th a:hover {
+    text-shadow: 2px 2px 4px #000000;
+}
+span.page-link {
+    color: black;
+    text-decoration: none;
+    border: none;
+}
+span.page-link:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+.page-link{
+    display: inline;
+}
+.cards{
+    display: inline-block;
+    padding: .25rem .5rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+    color: #17a2b8;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid #17a2b8;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+}

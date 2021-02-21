@@ -1,0 +1,36 @@
+.header-top,
+.header-bottom {
+    background-color: #0b2e13;
+}
+.header-top {
+    text-align: right;
+    height: 5px;
+}
+.header-bottom {
+    height: 4px;
+}
+.yellow {
+    background-color: darkgoldenrod;
+}
+
+.logo {
+    height: 96px;
+}
+.en,
+.ua {
+    height: 48px;
+}
+.logo {
+    margin-left: 10%;
+}
+a.margin-left {
+    margin-left: calc(80% - 368px);
+}
+.footer {
+    position:absolute;
+    bottom: 0;
+    background-color: #003300;
+    height: 100px;
+    margin-bottom: 0;
+    width: 100%;
+}

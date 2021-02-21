@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <title th:text="#{payments.list}"></title>
+</head>
+<body>
+<header class="container-fluid">
+    <div class="header-logo">
+        <a th:href="@{/user/home}"><img src="/images/logo.png" class="logo"></a>
+        <a th:href="@{/user/payments/?lang=uk}" class="margin-left">
+            <img src="/images/ua.svg" alt="Українська" class="ua"/></a>
+        <a th:href="@{/user/payments/?lang=en}"><img src="/images/en.svg" alt="English" class="en"/></a>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <form th:action="@{/logout}" method="get">
+        <button class="btn btn-md btn-block btn-dark" name="logout" type="Submit" th:text="#{label.logout}"></button>
+    </form>
+    <div class="container-fluid" style="margin-top:40px;">
+        <span th:text="#{text.welcome} + ' '"></span><span th:utext="${activeUserName}"></span>
+        <hr>
+    </div>
+
+
+    <div class="container-fluid">
+        <h1 th:text="#{title.payments}"></h1>
+        <hr>
+        <h2 th:text="#{title.send.payment}"></h2>
+
+        <div class = "container">
+            <form autocomplete="off" action="#" th:action="@{/user/send_payment/save}"
+                  th:object="${payment}" method="POST" role="form">
+
+                <input type="hidden" th:field="*{paymentId}">
+                <span th:text="#{payment.from} + ':   '"></span><span th:utext="${bankAccountFromNumber}"></span><br>
+                <span th:text="#{payment.to} + ':   '"></span>
+                <input type="text" th:field="*{toBankAccount}" class="form-control mb-4 col-4">
+
+                <span th:text="#{payment.paymentAmount} + ':   '"></span>
+                <input type="text" th:field="*{paymentAmount}" class="form-control mb-4 col-4"
+                       data-behaviour="decimal">
+                <br>
+                <button type="submit" class="btn btn-info col-2" th:text="#{payment.confirm}"></button>
+                <a th:if="!${payment.isSent}" th:text="#{payment.delete.payment}"
+                   th:href="@{/user/send_payment/delete_payment{id}(id=${payment.paymentId})}"
+                   th:data-confirm-delete="|#{message.confirm.delete}|"
+                   onclick="return confirm(this.getAttribute('data-confirm-delete'))"
+                   class="btn btn-danger"></a>
+                <br>
+                <br>
+                <h2 th:if="${errorMessage}"><span class="text-danger" th:utext="#{error.message}"></span></h2>
+                <h2 th:if="${successMessage}"><span class="text-danger" th:utext="#{success.message}"></span></h2>
+            </form>
+            <p th:if="${stringInfo}" th:utext="#{stringinfo.something.went.wrong}" style="color:red;"></p>
+        </div>
+        <hr>
+        <a th:href = "@{/user/payments}" th:text="#{label.backtouserlist}"></a>
+    </div>
+</div>
+<script th:src="@{static/js/jquery-3.2.1.slim.min.js}"></script>
+<script th:src="@{static/js/popper.min.js}"></script>
+<script th:src="@{static/bootstrap/bootstrap.min.js}"></script>
+<script th:src="@{static/js/enabledisable.js}"></script>
+<script th:src="@{static/js/sark-decimal.js}"></script>
+</body>
+</html>
