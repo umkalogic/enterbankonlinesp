@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://example.com/functions" prefix="f" %>
 <%@ taglib prefix="fmr" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -44,33 +45,30 @@
 
         <div class = "container">
             <form autocomplete="off" action="controller" method="POST" role="form">
-                <input type="hidden" name="id" value="${param.id}">
-
-                <span><fmt:message key="payment.from"/>:    ${param.bankaccountfrom}</span><br>
-                <br>
+                <input type="hidden" name="id" value="${requestScope.id}">
+                <input type="hidden" name="bankaccountfrom" value="${requestScope.bankaccountfrom}">
+                <span><fmt:message key="payment.from"/>:    ${requestScope.bankaccountfrom}</span><br><br>
                 <span><fmt:message key="payment.to"/>:    </span>
-                <input type="text" name="tobankaccount" required class="form-control mb-4 col-4">
-                <br>
+                <input type="text" name="tobankaccount" required class="form-control mb-4 col-4"
+                pattern="(\d{14})"><br>
                 <span><fmt:message key="payment.paymentAmount"/>:    </span>
-                <input type="text" name="paymentamount" required value="0.00" class="form-control mb-4 col-4"
-                       data-behaviour="decimal">
+                <input type="text" name="paymentamount" required class="form-control mb-4 col-4"
+                       data-behaviour="decimal" min="0.01" pattern="(\d+.\d{2})"><span>  ${requestScope.currency}</span>
 <%--                <label th:if="${#fields.hasErrors('paymentAmount')}" th:errors="*{paymentAmount}"--%>
 <%--                       class="validation-message"></label>--%>
                 <br>
-                <button type="submit" name="command" value="confirmpayment" class="btn btn-info col-2"><fmt:message key="payment.create"/></button>
-                <br>
-                <br>
-                    <c:if test="${requestScope.errorMessage != null}">
-                    <h2 class="text-danger"><fmt:message key="error.message"/></h2>
-                    </c:if>
+                <button type="submit" name="command" value="createpayment" class="btn btn-info col-2">
+                    <fmt:message key="payment.create"/></button><br><br>
+                <c:if test="${requestScope.errorMessage != null}">
+                   <h2 class="text-danger"><fmt:message key="error.message"/></h2>
+                </c:if>
             </form>
         </div>
-    <c:if test="${requestScope.stringInfo != null}">
-        <p  style="color:red;"><fmt:message key="stringinfo.something.went.wrong"/></p>
-    </c:if>
         <hr>
         <a href="${pageContext.servletContext.contextPath}/controller?command=userhome"><fmt:message key="label.backtouserlist"/></a>
     </div>
+
+    <br><br><br><br>
 </div>
 <script src="../../../static/js/jquery-3.2.1.slim.min.js"></script>
 <script src="../../../static/js/popper.min.js"></script>

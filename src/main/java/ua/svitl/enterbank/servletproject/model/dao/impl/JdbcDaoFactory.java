@@ -13,7 +13,7 @@ public class JdbcDaoFactory extends AbstractDaoFactory {
     private static final Logger LOG = LogManager.getLogger(JdbcDaoFactory.class);
     private static final String CREATING = "Creating {}";
 
-    private final DataSource dataSource = ConnectionPoolHolder.getDataSource();
+    private final transient DataSource dataSource = ConnectionPoolHolder.getDataSource();
 
     private Connection getConnection() throws DaoException {
         try {

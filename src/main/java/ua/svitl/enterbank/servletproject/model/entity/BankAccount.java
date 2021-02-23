@@ -17,7 +17,7 @@ public class BankAccount implements Serializable {
     private String currency = EntityConstants.DEFAULT_CURRENCY;
     private Boolean enableRequest = Boolean.FALSE;
     private Boolean active = Boolean.TRUE;
-    // private Integer personId; // column
+    private Integer personId; // column
     private List<Payment> bankAccountPayments = new ArrayList<>();
     private List<CreditCard> bankAccountCreditCards = new ArrayList<>();
     private Person person = new Person();
@@ -134,6 +134,14 @@ public class BankAccount implements Serializable {
 
     public void setBankAccountCreditCard(CreditCard bankAccountCreditCard) {
         bankAccountCreditCards.add(bankAccountCreditCard);
+    }
+
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
+    }
+
+    public Integer getPersonId() {
+        return personId;
     }
 
     @Override

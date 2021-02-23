@@ -30,6 +30,7 @@ public class CommandContainer {
         commands.put("confirmpayment", new ConfirmPaymentCommand());
         commands.put("enableaccountrequest", new EnableAccountRequestCommand());
         commands.put("disableaccount", new DisableAccountCommand());
+        commands.put("createpayment", new CreatePaymentCommand());
 
         // admin commands
         commands.put("adminhome", new AdminHomeCommand());
@@ -37,6 +38,7 @@ public class CommandContainer {
         commands.put("showuseraccounts", new ShowUserAccountsCommand());
         commands.put("changeuserstatus", new ChangeUserStatusCommand());
         commands.put("showformforuserupdate", new ShowFormForUserUpdateCommand());
+        commands.put("submitformforuserupdate", new SubmitFormForUserUpdateCommand());
         commands.put("changeaccountstatus", new ChangeAccountStatusCommand());
 
         LOG.debug("Command container was successfully initialized");

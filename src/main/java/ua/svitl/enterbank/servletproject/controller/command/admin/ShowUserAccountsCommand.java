@@ -49,7 +49,7 @@ public class ShowUserAccountsCommand implements Command {
             LOG.debug("End execute command");
             return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
         } catch (ServiceException ex) {
-            LOG.error("UserHome: error loading user home page");
+            LOG.error("Error loading user accounts");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
         }
@@ -59,6 +59,8 @@ public class ShowUserAccountsCommand implements Command {
         try {
             return Integer.parseInt(request.getParameter("id"));
         } catch (NumberFormatException ex) {
+            LOG.error("Couldn't parse to Int ==> {}", ex.getMessage());
+            LOG.trace("Setting id to 1");
             return 1;
         }
     }

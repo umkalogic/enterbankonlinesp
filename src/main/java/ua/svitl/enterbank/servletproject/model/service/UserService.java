@@ -13,9 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserService implements Serializable {
+    private static final long serialVersionUID = 3465516945841743146L;
+
     private static final Logger LOG = LogManager.getLogger(UserService.class);
 
-    transient AbstractDaoFactory daoFactory = AbstractDaoFactory.getInstance();
+    private final AbstractDaoFactory daoFactory = AbstractDaoFactory.getInstance();
 
     public List<UserPersonDataDto> getAllUsers(int pageNo, int pageSize, String sortField, String sortDir)
             throws ServiceException {

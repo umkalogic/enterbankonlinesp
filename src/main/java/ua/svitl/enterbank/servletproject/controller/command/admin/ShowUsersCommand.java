@@ -72,6 +72,8 @@ public class ShowUsersCommand implements Command {
         try {
             return Integer.parseInt(request.getParameter("currentpage"));
         } catch (NumberFormatException ex) {
+            LOG.error("Couldn't parse to Int ==> {}", ex.getMessage());
+            LOG.trace("Setting currentpage to 1");
             return 1;
         }
     }

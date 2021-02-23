@@ -6,9 +6,7 @@ import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandContainer;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
-import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +19,9 @@ public class Controller extends HttpServlet {
     private static final Logger LOG = LogManager.getLogger(Controller.class);
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            process(req, resp);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+                process(request, response);
     }
 
     @Override
@@ -51,7 +50,6 @@ public class Controller extends HttpServlet {
             String forwardPage = page.getPage();
 
             LOG.trace("Go to forward address: {}", forwardPage);
-
             dispatch(request, response, page);
         } catch (AppException ex) {
             request.setAttribute("errorMessage", ex.getMessage());
@@ -60,6 +58,7 @@ public class Controller extends HttpServlet {
         }
         LOG.debug("Servlet ends");
         LOG.debug("=============================================================================");
+        request.setAttribute("errorMessage", "");
 
     }
 
@@ -69,9 +68,9 @@ public class Controller extends HttpServlet {
         LOG.trace("Dispatching... {}", pageToDispatch);
 
         if (page.isRedirect()) {
-//            response.setHeader("Cache-control", "no-cache");
-//            response.setHeader("Cache-control", "no-control");
-//            response.setHeader("Pragma", "no-cache");
+            response.setHeader("Cache-control", "no-cache");
+            response.setHeader("Cache-control", "no-control");
+            response.setHeader("Pragma", "no-cache");
 
             LOG.trace("... redirect page... {}", pageToDispatch);
             response.sendRedirect(request.getContextPath() + pageToDispatch);

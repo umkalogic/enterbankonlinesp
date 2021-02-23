@@ -1,16 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page isELIgnored="false" %>
+<%@ page session="true" %>
 
-<c:set var="lang" value = "${not empty param.lang ? param.lang : pageContext.request.locale}"
-       scope="session" />
-<fmt:setLocale value="${lang}" />
+<fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="messages" />
 <!DOCTYPE html>
-<html lang="${param.lang}">
+<html>
 <head>
     <title>Error page</title>
     <meta charset="utf-8"/>
@@ -21,8 +20,8 @@
     <link rel="stylesheet" type="text/css" href="../../static/css/registration.css"/>
 </head>
 <body>
-<form action="${pageContext.servletContext.contextPath}/controller?command=default" method="get">
-    <button class="btn btn-md btn-warning btn-block" type="Submit"><fmt:message key="info.returnback" /></button>
+<form action="controller" method="get">
+    <button class="btn btn-md btn-warning btn-block" name="command" value="login" type="Submit"><fmt:message key="info.returnback" /></button>
 </form>
 <div class="container-fluid">
     <jsp:include page="fragments/nav-language.jsp">
@@ -35,7 +34,7 @@
     <p><fmt:message key="error.hasoccured" /></p>
     <br>
     <p style="color:darkred;"><c:out value="${requestScope.errorMessage}" /></p>
-    <c:remove var="${requestScope.errorMessage}" />
+    <c:remove var="errorMessage" scope="request" />
 </div>
 
 <script src="../../static/js/jquery-3.2.1.slim.min.js"></script>

@@ -28,7 +28,7 @@ public class AccessFilter implements Filter {
         LOG.debug("Access filter starts");
 
         if (accessAllowed(request)) {
-            LOG.debug("Access filter ends");
+            LOG.debug("Access is allowed. Access filter ends");
             chain.doFilter(request, response);
         } else {
             String errorMessage = "You do not have permission to access the requested resource";

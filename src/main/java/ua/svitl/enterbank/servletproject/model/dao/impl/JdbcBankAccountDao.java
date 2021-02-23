@@ -154,4 +154,34 @@ public class JdbcBankAccountDao implements BankAccountDao {
             throw new DaoException("Couldn't find accounts for the given user in DB");
         }
     }
+
+    @Override
+    public boolean exists(BankAccount bankAccount) throws DaoException {
+        LOG.debug("Start check if bank account exists");
+        String query = daoProperties.getProperty("query.find.bank.account");
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, bankAccount.getBankAccountNumber());
+            LOG.trace("QUERY: [ {} ]", query);
+            return statement.execute();
+        } catch (SQLException ex) {
+            LOG.error("Couldn't find bank account --> {}", bankAccount.getBankAccountNumber());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isActive(BankAccount bankAccount) throws DaoException {
+        LOG.debug("Start check if bank account is active");
+        String query = daoProperties.getProperty("query.find.bank.account.is.active");
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, bankAccount.getBankAccountNumber());
+            LOG.trace("QUERY: [ {} ]", query);
+            ResultSet rs = statement.executeQuery();
+            return rs.getBoolean("is_active");
+        } catch (SQLException ex) {
+            LOG.error("Couldn't find bank account --> {}", bankAccount.getBankAccountNumber());
+            return false;
+        }
+    }
+
 }

@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
-import ua.svitl.enterbank.servletproject.controller.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.entity.Payment;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.model.service.PaymentService;
@@ -16,20 +15,16 @@ import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ResourceBundle;
 
 import static ua.svitl.enterbank.servletproject.controller.command.user.utils.PaymentUtils.*;
 
-/**
- * Class which is used to confirm payment upon user request.
- */
-public class ConfirmPaymentCommand implements Command {
+public class CreatePaymentCommand implements Command {
     private static final long serialVersionUID = 4339457107093951826L;
-    private static final Logger LOG = LogManager.getLogger(ConfirmPaymentCommand.class);
+    private static final Logger LOG = LogManager.getLogger(CreatePaymentCommand.class);
     private final PaymentService paymentService = new PaymentService();
 
     /**
-     * Execution method for command.
+     * Execution method for createpayment command.
      *
      * @param request  http request
      * @param response http response
@@ -41,7 +36,6 @@ public class ConfirmPaymentCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         LOG.trace("Logged user: {}", user);
-
         try {
             LOG.trace("Creating new payment");
             Payment payment = new Payment();
@@ -50,23 +44,24 @@ public class ConfirmPaymentCommand implements Command {
             payment.setPaymentAmount(setAmount(request));
             String bankAccountNumber = getString(request, "bankaccountfrom");
 
-            paymentService.updatePayment(user, payment);
+            payment = paymentService.createPayment(user, payment, bankAccountNumber);
 
-            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_PAYMENTS);
+            LOG.trace("Created payment ==> {}", payment);
+            request.setAttribute(ControllerConstants.ATTR_PAYMENT, payment);
+
+            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_SEND_PAYMENT);
 
             LOG.debug("End execute command");
-            return CommandResult.forward(ControllerConstants.PAGE_USER_PAYMENTS);
-
-        } catch (ServiceException ex) {
-            LOG.error("Couldn't confirm payment");
-            ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
-            request.setAttribute("errorMessage", rb.getString("label.error.confirm.payment"));
             return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
+        } catch (ServiceException ex) {
+            LOG.error("Exception in DB ==> ", ex);
+            request.setAttribute("errorMessage", ex.getMessage());
+            return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
         } catch (CommandException ex) {
-            LOG.error("Error in payment data ==> {}", ex.getMessage());
+            LOG.error("Exception in form data ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", ex.getMessage());
             return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
         }
-
     }
+
 }

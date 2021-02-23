@@ -66,11 +66,11 @@
   <filter-class>ua.svitl.enterbank.servletproject.controller.filter.AccessFilter</filter-class>
   <init-param>
     <param-name>admin</param-name>
-    <param-value>adminhome showusers showuseraccounts showformforuserupdate changeuserstatus changeaccountstatus</param-value>
+    <param-value>adminhome showusers showuseraccounts showformforuserupdate changeuserstatus changeaccountstatus submitformforuserupdate</param-value>
   </init-param>
   <init-param>
     <param-name>user</param-name>
-    <param-value>userhome payments showformforpayment disableaccount enableaccountrequest confirmpayment deletepayment</param-value>
+    <param-value>userhome payments showformforpayment createpayment disableaccount enableaccountrequest confirmpayment deletepayment sendpayment</param-value>
   </init-param>
   <init-param>
     <param-name>all</param-name>

@@ -26,7 +26,7 @@ public class LogoutCommand implements Command {
             session.invalidate();
         }
 
-        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Cache-control", "no-cache");
         response.setHeader("Cache-control", "no-store");
         response.setHeader("Pragma", "no-cache");
         LOG.debug("Command ends. Go to {}", ControllerConstants.PAGE_INDEX);

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://example.com/functions" prefix="f" %>
 <%@ taglib prefix="fmr" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -44,25 +45,23 @@
         <h2><fmt:message key="title.send.payment"/></h2>
 
         <div class = "container">
-            <form autocomplete="off" action="controller" method="POST" role="form">
-                <input type="hidden" name="paymentid" value="${requestScope.paymentId}">
-                <input type="hidden" name="command" value="confirmpayment">
-                <span><fmt:message key="payment.from"/>:    ${requestScope.bankAccountFrom}</span><br>
+            <form autocomplete="off" action="controller" method="POST" role="form" class="form-group"
+            style="border:1px dashed #383d41; padding: 20px;">
+                <input type="hidden" name="paymentid" value="${requestScope.payment.paymentId}">
+                <span class="col-6 form-control-plaintext"><fmt:message key="payment.from"/>:    ${requestScope.payment.bankAccountId}</span><br>
                 <br>
-                <span><fmt:message key="payment.to"/>:    </span>
-                <input type="text" name="tobankaccount" value="${requestScope.toBankAccount}" disabled class="form-control mb-4 col-4">
+                <span class="col-2 form-control-plaintext"><fmt:message key="payment.to"/>:    </span>
+                <input type="text" name="tobankaccount" value="${requestScope.payment.toBankAccount}" disabled class="form-control mb-4 col-4">
                 <br>
-                <span><fmt:message key="payment.paymentAmount"/>:    </span>
-                <input type="text" name="paymentamount" value="${requestScope.paymentAmount}" disabled class="form-control mb-4 col-4"
-                       data-behaviour="decimal">
+                <span class="col-2 form-control-plaintext"><fmt:message key="payment.paymentAmount"/>:    </span>
+                <input type="text" name="paymentamount" value="${requestScope.payment.paymentAmount}" disabled class="form-control mb-4 col-4">
                 <br>
                 <button type="submit" class="btn btn-info col-2"><fmt:message key="payment.confirm"/></button>
                 <c:if test="${!requestScope.payment.isSent}">
                 <form action="controller" method="post" class="btn">
-                    <input type="hidden" name="command" value="deletepayment">
                     <input type="hidden" name="id" value="${requestScope.payment.paymentId}">
                     <c:set var="msg"><fmt:message key="message.confirm.delete"/></c:set>
-                    <button type="submit" onclick="return confirm(this.getAttribute(${msg}))" class="btn btn-danger">
+                    <button type="submit" name="command" value="deletepayment" onclick="return confirm(this.getAttribute(${msg}))" class="btn btn-danger">
                         <fmt:message key="payment.delete.payment"/></button>
                 </form>
                 </c:if>
@@ -71,13 +70,9 @@
                 <c:if test="${requestScope.errorMessage != null}">
                     <h2 class="text-danger"><fmt:message key="error.message"/></h2>
                 </c:if>
-                <c:if test="${requestScope.successMessage != null}">
-                    <h2 class="text-danger"><fmt:message key="success.message"/></h2>
-                </c:if>
+
             </form>
-                <c:if test="${requestScope.stringInfo != null}">
-                    <p style="color:red;"><fmt:message key="stringinfo.something.went.wrong"/></p>
-                </c:if>
+
 
         </div>
         <hr>

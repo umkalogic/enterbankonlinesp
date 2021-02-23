@@ -20,9 +20,11 @@ public class NoCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) {
         LOG.debug("Command starts");
         HttpSession session = request.getSession();
+
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         request.setAttribute("errorMessage", rb.getString("label.no.such.command"));
         LOG.debug("Set request attribute errorMessage: no such command");
+
         LOG.debug("Command finished");
         return CommandResult.forward(ControllerConstants.PAGE_ERROR);
     }

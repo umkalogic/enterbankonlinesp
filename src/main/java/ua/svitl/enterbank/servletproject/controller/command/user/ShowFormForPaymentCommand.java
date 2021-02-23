@@ -5,8 +5,10 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
+import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
 import ua.svitl.enterbank.servletproject.model.entity.Payment;
 import ua.svitl.enterbank.servletproject.model.entity.User;
+import ua.svitl.enterbank.servletproject.model.service.BankAccountService;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpSession;
 public class ShowFormForPaymentCommand implements Command {
     private static final long serialVersionUID = 5222081051064775272L;
     private static final Logger LOG = LogManager.getLogger(ShowFormForPaymentCommand.class);
+
     /**
      * Execution method for command.
      *
@@ -33,10 +36,14 @@ public class ShowFormForPaymentCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         LOG.trace("Logged user: {}", user);
-        LOG.trace("Making payment from account id: {}, {}",
+        LOG.trace("Making payment from account id: {}; account number: {}",
                 request.getParameter("id"), request.getParameter("bankaccountfrom"));
-        Payment payment = new Payment();
-        request.setAttribute("payment", payment);
+
+        request.setAttribute("id", request.getParameter("id"));
+        request.setAttribute("bankaccountfrom", request.getParameter("bankaccountfrom"));
+        request.setAttribute("currency", request.getParameter("currency"));
+
+
         LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_MAKE_PAYMENT);
 
         LOG.debug("End execute command");
