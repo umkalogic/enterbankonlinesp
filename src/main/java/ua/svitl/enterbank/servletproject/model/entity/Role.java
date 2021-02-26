@@ -9,7 +9,9 @@ public class Role implements Serializable {
     private static final long serialVersionUID = 3507926514750446696L;
     private Integer roleId;
     private String roleName = "USER";
-    private List<User> users = new ArrayList<>(); // users
+
+
+    private final List<User> users = new ArrayList<>(); // users
 
     public Role() {
     }
@@ -42,6 +44,10 @@ public class Role implements Serializable {
 
     public String getRoleName() {
         return roleName;
+    }
+
+    public List<User> getUsers() {
+        return users;
     }
 
     @Override

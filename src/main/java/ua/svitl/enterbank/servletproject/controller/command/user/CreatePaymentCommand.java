@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 import static ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils.*;
 
 public class CreatePaymentCommand implements Command {
-    private static final long serialVersionUID = 4339457107093951826L;
+    private static final long serialVersionUID = 4420654600091410248L;
     private static final Logger LOG = LogManager.getLogger(CreatePaymentCommand.class);
     private final PaymentService paymentService = new PaymentService();
 
@@ -42,9 +42,11 @@ public class CreatePaymentCommand implements Command {
 
             ParametersUtils.bankAccountAttributes(request);
             Payment payment = new Payment();
-            payment.setToBankAccount(getString(request, "tobankaccount"));
-            payment.setPaymentAmount(getAmount(request));
-            String bankAccountNumber = getString(request, "bankaccountfrom");
+            payment.setToBankAccount(ParametersUtils.getString(request, "tobankaccount",
+                    "Bank account must consist of 14 digits"));
+            payment.setPaymentAmount(ParametersUtils.getAmount(request));
+            String bankAccountNumber = ParametersUtils.getString(request, "bankaccountfrom",
+                    "Bank account must consist of 14 digits");
             payment.getBankAccount().setBankAccountNumber(bankAccountNumber);
             payment.getBankAccount().setCurrency(request.getParameter("currency"));
 
@@ -60,8 +62,8 @@ public class CreatePaymentCommand implements Command {
         } catch (ServiceException ex) {
             LOG.error("Exception in DB ==> ", ex);
             request.setAttribute("errorMessage", ex.getMessage());
-            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_HOME);
-            return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
+            LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
         } catch (CommandException ex) {
             LOG.error("Exception in form data ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", ex.getMessage());

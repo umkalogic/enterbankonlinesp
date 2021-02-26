@@ -8,6 +8,7 @@ import ua.svitl.enterbank.servletproject.model.dao.mapper.CreditCardMapper;
 import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
 import ua.svitl.enterbank.servletproject.model.dto.CreditCardDto;
 import ua.svitl.enterbank.servletproject.model.entity.BankAccount;
+import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.utils.exception.DaoException;
 
 import java.sql.*;
@@ -201,6 +202,50 @@ public class JdbcBankAccountDao implements BankAccountDao {
         } catch (SQLException e) {
             LOG.error("Couldn't update bank account status in DB: id = {}", id);
             throw new DaoException("Couldn't update bank account (id="+ id + ") status in DB.");
+        }
+    }
+
+    @Override
+    public boolean updateAccountIsActive(User user, int id, boolean active) throws DaoException {
+        LOG.debug("Start update bank account (id = {}): isActive ==> {}, for user ==> {}", id, active, user);
+        String query = daoProperties.getProperty("query.update.bank.account.is.active.for.user");
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setBoolean(1, active);
+            statement.setInt(2, id);
+            statement.setInt(3, user.getPersonId());
+            LOG.trace("QUERY: [ {} ], VALUES ({}, {})", query, active, id);
+            LOG.trace("Statement ==> [{}]", statement);
+
+            statement.execute();
+
+            LOG.debug("End update bank account={} is_active={} for user ==> [ {} ]", id, active, user);
+            return true;
+        } catch (SQLException e) {
+            LOG.error("Couldn't update bank account status in DB: id = {}, user ==> [ {} ]", id, user);
+            throw new DaoException("Couldn't update bank account (id=" + id + ") status in DB for user (id=" +
+                    user.getUserId() + ")" );
+        }
+    }
+
+    @Override
+    public boolean updateAccountEnableRequest(User user, int id) throws DaoException {
+        LOG.debug("Start update bank account (id = {}) enable request, for user ==> {}", id, user);
+        String query = daoProperties.getProperty("query.update.bank.account.enable.request.for.user");
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            statement.setInt(2, user.getPersonId());
+            LOG.trace("QUERY: [ {} ]", query);
+            LOG.trace("Statement ==> [{}]", statement);
+
+            statement.execute();
+
+            LOG.debug("End update bank account={} enable_request for user ==> [ {} ]", id, user);
+            return true;
+        } catch (SQLException e) {
+            LOG.error("Couldn't update bank account enable request status in DB: id = {}, user ==> [ {} ]",
+                    id, user);
+            throw new DaoException("Couldn't update bank account (id=" + id + ") enable request status in DB for user " +
+                    "(id=" + user.getUserId() + ")" );
         }
     }
 
