@@ -20,14 +20,14 @@ public class BankAccountService implements Serializable {
 
     private final AbstractDaoFactory daoFactory = AbstractDaoFactory.getInstance();
 
-    public List<BankAccountDto> getUserAccounts(String userName, String sortField, String sortDir)
+    public List<BankAccountDto> getUserAccounts(User user, String sortField, String sortDir)
             throws ServiceException {
         try (BankAccountDao dao = daoFactory.createBankAccountDao()) {
             LOG.debug("Start get account: sortField={}, sortDir={}", sortField, sortDir);
-            return dao.getUserAccounts(userName, sortField, sortDir);
+            return dao.getUserAccounts(user, sortField, sortDir);
         } catch (Exception ex) {
             LOG.error("Couldn't get BankAccount from BankAccountService#getUserAccounts(): {}", ex.getMessage());
-            throw new ServiceException("Couldn't get user accounts", ex);
+            throw new ServiceException("Couldn't get user accounts");
         }
 
     }
@@ -38,7 +38,7 @@ public class BankAccountService implements Serializable {
             return dao.getUserAccountsById(id, sortField, sortDir);
         } catch (Exception ex) {
             LOG.error("Couldn't get BankAccount from BankAccountService#getUserAccountsById(): {}", ex.getMessage());
-            throw new ServiceException("Couldn't get user accounts", ex);
+            throw new ServiceException("Couldn't get user accounts");
         }
     }
 

@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
@@ -59,10 +59,10 @@ public class ConfirmPaymentCommand implements Command {
 
             paymentService.updatePayment(user, payment);
 
-            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_PAYMENTS);
+            LOG.debug("Forwarding to... {}", ControllerConstants.COMMAND_USER_PAYMENTS);
 
             LOG.debug("End execute command");
-            return CommandResult.forward(ControllerConstants.PAGE_USER_PAYMENTS);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS);
 
         } catch (ServiceException ex) {
             LOG.error("Couldn't confirm payment");

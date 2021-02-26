@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.admin;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
@@ -16,6 +16,7 @@ import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class SubmitFormForUserUpdateCommand implements Command {
@@ -40,7 +41,16 @@ public class SubmitFormForUserUpdateCommand implements Command {
             int id = ParametersUtils.getId(request, "id");
             String userName = ParametersUtils.getString(request, "username", "User name cannot be null");
             String email = ParametersUtils.getString(request, "email", "Email cannot be null");
-            boolean active = "true".equalsIgnoreCase(request.getParameter("isactive"));
+
+            String[] isactives = request.getParameterValues("isactive");
+            Arrays.stream(isactives).forEach(e -> LOG.debug("ISACTIVES: {}", e));
+
+            boolean active = false;
+            if(isactives.length > 1) { //If checkbox is checked than assign it with true or 1
+                active = true;
+            }
+
+           // boolean active = "true".equalsIgnoreCase(request.getParameter("isactive"));
             User user = new User();
             user.setUserId(id);
             user.setUserName(userName);

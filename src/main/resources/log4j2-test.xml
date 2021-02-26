@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Properties>
-        <Property name="filename">/webapp/logs/enterbank.log</Property>
+        <Property name="filename">enterbank.log</Property>
     </Properties>
     <Appenders type="Console" name="STDOUT">
         <Console name="Console" target="SYSTEM_OUT">

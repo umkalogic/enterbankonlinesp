@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.admin;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
@@ -49,13 +49,11 @@ public class ShowUserAccountsCommand implements Command {
 
             request.setAttribute("listBankAccounts", bankAccountList);
 
+            request.setAttribute("id", id);
             request.setAttribute("sortField", sortField);
             request.setAttribute("sortDir", sortDir);
             request.setAttribute("reverseSortDir", "asc".equalsIgnoreCase(sortDir) ? "desc" : "asc");
 
-            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_USER_ACCOUNTS);
-            LOG.debug("End execute command");
-            return CommandResult.forward(ControllerConstants.PAGE_ADMIN_USER_ACCOUNTS);
 
         } catch (ServiceException ex) {
             LOG.error("Error loading user accounts");
@@ -66,8 +64,10 @@ public class ShowUserAccountsCommand implements Command {
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         }
-        LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
-        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
+
+        LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_USER_ACCOUNTS);
+        LOG.debug("End execute command");
+        return CommandResult.forward(ControllerConstants.PAGE_ADMIN_USER_ACCOUNTS);
     }
 
 }

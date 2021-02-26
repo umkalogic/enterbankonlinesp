@@ -64,52 +64,17 @@ public class JdbcBankAccountDao implements BankAccountDao {
     }
 
     @Override
-    public List<BankAccountDto> getUserAccounts(String userName, String sortField, String sortDir)
+    public List<BankAccountDto> getUserAccounts(User user, String sortField, String sortDir)
             throws DaoException {
         LOG.debug("Start get all user bank accounts");
         String query = daoProperties.getProperty("query.find.bank.accounts.for.user") +
                 " ORDER BY " + sortField + " " + sortDir + ";";
+        LOG.trace("QUERY: [ {} ]", query);
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, userName);
-            List<BankAccountDto> bankAccountDtoList = new ArrayList<>();
-            List<CreditCardDto> cards = new ArrayList<>();
-            LOG.trace("QUERY: [ {} ]", query);
-            ResultSet rs = statement.executeQuery();
+            statement.setString(1, user.getUserName());
+            List<BankAccountDto> bankAccountDtoList = getBankAccountsWithCreditCardsList(statement);
 
-            LOG.trace("Mapping bank accounts...");
-            while (rs.next()) {
-                BankAccountDtoMapper bankAccountDtoMapper = new BankAccountDtoMapper();
-                BankAccountDto bankAccountDto = bankAccountDtoMapper.map(rs);
-                bankAccountDtoList.add(bankAccountDto);
-
-                CreditCardMapper creditCardMapper = new CreditCardMapper();
-                CreditCardDto creditCardDto = creditCardMapper.map(rs);
-                cards.add(creditCardDto);
-            }
-
-            List<BankAccountDto> finalBankAccountDtoList1 = bankAccountDtoList;
-            List<CreditCardDto> cc = cards.stream()
-                    .filter(e -> e.getBankAccountId().equals(finalBankAccountDtoList1.get(0).getBankAccountId()))
-                    .collect(Collectors.toList());
-            bankAccountDtoList.get(0).setBankAccountCreditCards(cc);
-
-            for (int i = 1; i < bankAccountDtoList.size(); i++) {
-                if (!bankAccountDtoList.get(i).getBankAccountId().equals(bankAccountDtoList.get(i - 1).getBankAccountId())) {
-                    int finalI = i;
-                    List<BankAccountDto> finalBankAccountDtoList = bankAccountDtoList;
-                    List<CreditCardDto> c = cards.stream()
-                            .filter(e -> e.getBankAccountId().equals(finalBankAccountDtoList.get(finalI).getBankAccountId()))
-                            .collect(Collectors.toList());
-                    bankAccountDtoList.get(i).setBankAccountCreditCards(c);
-                    LOG.trace("Bank account: {}", bankAccountDtoList.get(i));
-                }
-            }
-
-            bankAccountDtoList = bankAccountDtoList.stream()
-                    .filter(e -> !e.getBankAccountCreditCards().isEmpty())
-                    .collect(Collectors.toList());
-
-            LOG.debug("End get accounts for user with username={}", userName);
+            LOG.debug("End get accounts for user with username={}", user.getUserName());
             return bankAccountDtoList;
         } catch (SQLException ex) {
             LOG.error("Couldn't find accounts for user --> {}", ex.getMessage());
@@ -117,36 +82,57 @@ public class JdbcBankAccountDao implements BankAccountDao {
         }
     }
 
+    private  List<BankAccountDto> getBankAccountsWithCreditCardsList(PreparedStatement statement) throws SQLException {
+        List<BankAccountDto> bankAccountDtoList = new ArrayList<>();
+        List<CreditCardDto> cards = new ArrayList<>();
+
+        ResultSet rs = statement.executeQuery();
+
+        LOG.trace("Mapping bank accounts...");
+        while (rs.next()) {
+            BankAccountDtoMapper bankAccountDtoMapper = new BankAccountDtoMapper();
+            BankAccountDto bankAccountDto = bankAccountDtoMapper.map(rs);
+            bankAccountDtoList.add(bankAccountDto);
+
+            CreditCardMapper creditCardMapper = new CreditCardMapper();
+            CreditCardDto creditCardDto = creditCardMapper.map(rs);
+            cards.add(creditCardDto);
+        }
+
+        List<BankAccountDto> finalBankAccountDtoList1 = bankAccountDtoList;
+        List<CreditCardDto> cc = cards.stream()
+                .filter(e -> e.getBankAccountId().equals(finalBankAccountDtoList1.get(0).getBankAccountId()))
+                .collect(Collectors.toList());
+        bankAccountDtoList.get(0).setBankAccountCreditCards(cc);
+
+        for (int i = 1; i < bankAccountDtoList.size(); i++) {
+            if (!bankAccountDtoList.get(i).getBankAccountId().equals(bankAccountDtoList.get(i - 1).getBankAccountId())) {
+                int finalI = i;
+                List<BankAccountDto> finalBankAccountDtoList = bankAccountDtoList;
+                List<CreditCardDto> c = cards.stream()
+                        .filter(e -> e.getBankAccountId().equals(finalBankAccountDtoList.get(finalI).getBankAccountId()))
+                        .collect(Collectors.toList());
+                bankAccountDtoList.get(i).setBankAccountCreditCards(c);
+                LOG.trace("Bank account: {}", bankAccountDtoList.get(i));
+            }
+        }
+
+        bankAccountDtoList = bankAccountDtoList.stream()
+                .filter(e -> !e.getBankAccountCreditCards().isEmpty())
+                .collect(Collectors.toList());
+
+        return bankAccountDtoList;
+    }
+
     @Override
     public List<BankAccountDto> getUserAccountsById(int id, String sortField, String sortDir) throws DaoException {
         LOG.debug("Start get all user bank accounts");
         String query = daoProperties.getProperty("query.find.bank.accounts.for.user.id") +
                 " ORDER BY " + sortField + " " + sortDir + ";";
+        LOG.trace("QUERY: [ {} ]", query);
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
-            List<BankAccountDto> bankAccountDtoList = new ArrayList<>();
-            List<CreditCardDto> cards = new ArrayList<>();
-            LOG.trace("QUERY: [ {} ]", query);
-            ResultSet rs = statement.executeQuery();
-
-            LOG.trace("Mapping bank accounts...");
-            while (rs.next()) {
-                BankAccountDtoMapper bankAccountDtoMapper = new BankAccountDtoMapper();
-                BankAccountDto bankAccountDto = bankAccountDtoMapper.map(rs);
-                bankAccountDtoList.add(bankAccountDto);
-
-                CreditCardMapper creditCardMapper = new CreditCardMapper();
-                CreditCardDto creditCardDto = creditCardMapper.map(rs);
-                cards.add(creditCardDto);
-            }
-
-            for (BankAccountDto ba: bankAccountDtoList) {
-                List<CreditCardDto> cc = cards.stream()
-                        .filter(e -> e.getBankAccountId().equals(ba.getBankAccountId()))
-                        .collect(Collectors.toList());
-                ba.setBankAccountCreditCards(cc);
-                LOG.trace("Bank account: {}", ba);
-            }
+            List<BankAccountDto> bankAccountDtoList = getBankAccountsWithCreditCardsList(statement);
 
             LOG.debug("End get accounts for user with id={}", id);
             return bankAccountDtoList;

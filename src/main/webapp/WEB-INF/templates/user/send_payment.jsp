@@ -10,7 +10,7 @@
 
 <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="messages" />
-<c:set var="prevpage" value="userhome" />>
+<c:set var="prevpage" value="payments" />
 <html>
 
 <head>
@@ -26,14 +26,11 @@
 <div class="container-fluid">
     <jsp:include page="../fragments/nav-language.jsp">
         <jsp:param name="page" value="confirmpayment"/>
+        <jsp:param name="id" value="${requestScope.payment.paymentId}" />
     </jsp:include>
-</div>
 
-<div class="container-fluid">
-    <form action="controller" method="get">
-        <button class="btn btn-md btn-dark btn-block"
-                type="Submit" name="command" value="logout"><fmt:message key="label.logout" /></button>
-    </form>
+    <jsp:include page="../fragments/nav-logout.jsp"/>
+
     <div class="container-fluid" style="margin-top:40px;">
         <span><fmt:message key="text.welcome" /> <c:out value="${sessionScope.activeUserName}" /></span>
         <hr>
@@ -47,7 +44,7 @@
         <div class = "container">
             <form autocomplete="off" action="controller" method="POST" role="form" class="form-group"
             style="border:1px dashed #383d41; padding: 20px;">
-                <input type="hidden" name="id" value="${requestScope.payment.bankAccountId}">
+                <input type="hidden" name="id" value="${param.id}">
                 <input type="hidden" name="paymentid" value="${requestScope.payment.paymentId}">
                 <input type="hidden" name="bankaccountfrom" value="${requestScope.payment.bankAccount.bankAccountNumber}">
                 <span class="col-6 form-control-plaintext"><fmt:message key="payment.from"/>:    ${requestScope.payment.bankAccount.bankAccountNumber}</span><br>

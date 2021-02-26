@@ -27,10 +27,7 @@
         <jsp:param name="page" value="userhome"/>
     </jsp:include>
 
-    <form action="controller" method="get">
-        <button class="btn btn-md btn-dark btn-block"
-                type="Submit" name="command" value="logout"><fmt:message key="label.logout" /></button>
-    </form>
+    <jsp:include page="../fragments/nav-logout.jsp"/>
 
     <div class="container-fluid" style="margin-top:40px;">
         <span><fmt:message key="text.welcome" /> <c:out value="${sessionScope.activeUserName}" /></span>
@@ -39,6 +36,14 @@
     <c:if test="${requestScope.errorMessage != null}">
         <div class="container-fluid">
             <h3 style="color:darkred"><c:out value="${requestScope.errorMessage}"/></h3>
+            <c:remove var="errorMessage" scope="request" />
+        </div>
+        <br>
+    </c:if>
+    <c:if test="${requestScope.infoMessage != null}">
+        <div class="container-fluid">
+            <p><c:out value="${requestScope.infoMessage}"/></p>
+            <c:remove var="infoMessage" scope="request" />
         </div>
         <br>
     </c:if>

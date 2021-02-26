@@ -22,6 +22,7 @@ public class CommandContainer {
         commands.put("logout", new LogoutCommand());
         commands.put("nocommand", new NoCommand());
         commands.put("changelang", new ChangeLangCommand());
+        commands.put("default", new DefaultCommand());
 
         // user commands
         commands.put("userhome", new UserHomeCommand());

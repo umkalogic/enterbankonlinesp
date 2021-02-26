@@ -2,13 +2,10 @@ package ua.svitl.enterbank.servletproject.controller.command.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
-import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
-import ua.svitl.enterbank.servletproject.model.entity.Payment;
 import ua.svitl.enterbank.servletproject.model.entity.User;
-import ua.svitl.enterbank.servletproject.model.service.BankAccountService;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
 
 import javax.servlet.http.HttpServletRequest;

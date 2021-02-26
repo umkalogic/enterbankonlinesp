@@ -1,4 +1,4 @@
-package ua.svitl.enterbank.servletproject.controller;
+package ua.svitl.enterbank.servletproject.controller.command.utils;
 
 public final class ControllerConstants {
     // all users pages
@@ -27,9 +27,12 @@ public final class ControllerConstants {
     public static final String COMMAND_USERHOME = "controller?command=userhome";
     public static final String COMMAND_ADMIN_SHOW_USER_ACCOUNTS = "controller?command=showuseraccounts";
     public static final String COMMAND_USER_PAYMENTS = "controller?command=payments";
+    public static final String COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE = "controller?command=showformforuserupdate";
+
 
     // attributes
     public static final String ATTR_PAYMENT = "payment";
+
 
     private ControllerConstants() {}
 }

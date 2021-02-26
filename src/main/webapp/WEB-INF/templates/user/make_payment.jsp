@@ -27,12 +27,9 @@
     <jsp:include page="../fragments/nav-language.jsp">
         <jsp:param name="page" value="makepayment"/>
     </jsp:include>
-</div>
-<div class="container-fluid">
-    <form action="controller" method="get">
-        <button class="btn btn-md btn-dark btn-block"
-                type="Submit" name="command" value="logout"><fmt:message key="label.logout" /></button>
-    </form>
+
+    <jsp:include page="../fragments/nav-logout.jsp"/>
+
     <div class="container-fluid" style="margin-top:40px;">
         <span><fmt:message key="text.welcome" /> <c:out value="${sessionScope.activeUserName}" /></span>
         <hr>

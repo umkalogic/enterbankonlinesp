@@ -210,6 +210,7 @@ public class JdbcPaymentDao implements PaymentDao {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.setInt(2, user.getPersonId());
+            statement.execute();
             LOG.debug("End delete payment [{}] for given user ==> [ {} ]", id, user);
             return true;
         } catch (SQLException ex) {

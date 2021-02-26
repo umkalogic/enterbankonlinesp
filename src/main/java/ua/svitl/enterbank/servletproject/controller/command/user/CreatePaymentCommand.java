@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
@@ -16,8 +16,6 @@ import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import static ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils.*;
 
 public class CreatePaymentCommand implements Command {
     private static final long serialVersionUID = 4420654600091410248L;

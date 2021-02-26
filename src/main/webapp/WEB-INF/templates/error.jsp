@@ -20,9 +20,7 @@
     <link rel="stylesheet" type="text/css" href="../../static/css/registration.css"/>
 </head>
 <body>
-<form action="controller" method="get">
-    <button class="btn btn-md btn-warning btn-block" name="command" value="login" type="Submit"><fmt:message key="info.returnback" /></button>
-</form>
+<a class="btn btn-md btn-warning btn-block" href="${pageContext.servletContext.contextPath}/controller?command=default"><fmt:message key="info.returnback" /></a>
 <div class="container-fluid">
     <jsp:include page="fragments/nav-language.jsp">
         <jsp:param name="page" value="error"/>
@@ -34,7 +32,9 @@
     <p><fmt:message key="error.hasoccured" /></p>
     <br>
     <p style="color:darkred;"><c:out value="${requestScope.errorMessage}" /></p>
+    <p><c:out value="${requestScope.infoMessage}" /></p>
     <c:remove var="errorMessage" scope="request" />
+    <c:remove var="infoMessage" scope="request" />
 </div>
 
 <script src="../../static/js/jquery-3.2.1.slim.min.js"></script>

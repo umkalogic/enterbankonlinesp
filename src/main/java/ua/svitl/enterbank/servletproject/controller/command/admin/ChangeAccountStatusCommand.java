@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.admin;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
@@ -39,17 +39,20 @@ public class ChangeAccountStatusCommand implements Command {
             boolean status = "true".equalsIgnoreCase(request.getParameter("isactive"));
 
             bankAccountService.updateAccountActive(id, status);
-
+            LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMIN_SHOW_USER_ACCOUNTS);
+            return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_USER_ACCOUNTS +
+                    "&id=" + id + "&isactive=" + status);
         } catch (ServiceException ex) {
             LOG.error("Error loading account by id");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+            return CommandResult.forward(ControllerConstants.PAGE_ERROR);
         } catch (CommandException ex) {
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+            return CommandResult.forward(ControllerConstants.PAGE_ERROR);
         }
 
-        LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
-        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
+
     }
 }

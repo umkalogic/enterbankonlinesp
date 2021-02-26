@@ -47,6 +47,7 @@
             </div>
             <div align="center">
                 <p style="font-size: 20px; color: #FF1C19;"><c:out value="${requestScope.errorMessage}" /></p>
+                <c:remove var="errorMessage" scope="request" />
 
             </div>
 

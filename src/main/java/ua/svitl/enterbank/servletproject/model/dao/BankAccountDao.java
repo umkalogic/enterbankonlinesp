@@ -8,7 +8,7 @@ import ua.svitl.enterbank.servletproject.utils.exception.DaoException;
 import java.util.List;
 
 public interface BankAccountDao extends IDao<BankAccount, Integer> {
-    List<BankAccountDto> getUserAccounts(String userName, String sortField, String sortDir) throws DaoException;
+    List<BankAccountDto> getUserAccounts(User user, String sortField, String sortDir) throws DaoException;
     List<BankAccountDto> getUserAccountsById(int id, String sortField, String sortDir) throws DaoException;
     boolean exists(BankAccount bankAccount) throws DaoException;
     boolean isActive(BankAccount bankAccount) throws DaoException;

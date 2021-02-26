@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.utils.resource.Language;
 import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
@@ -48,6 +48,12 @@ public class ChangeLangCommand implements Command {
                 return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
             case "userhome":
                 return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
+            case "useraccounts":
+                return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_USER_ACCOUNTS +
+                        "&id=" + req.getParameter("id"));
+            case "showformforuserupdate":
+                return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE +
+                        "&id=" + req.getParameter("id"));
             default:
                 LOG.error("Command changelang: unknown page: {}", page);
                 req.setAttribute("errorMessage", rb.getString("label.no.such.command"));

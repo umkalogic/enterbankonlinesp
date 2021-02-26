@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.admin;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
@@ -47,6 +47,7 @@ public class AdminHomeCommand implements Command {
         } catch (ServiceException ex) {
             LOG.error("AdminHome: error loading admin home page");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
         }
     }

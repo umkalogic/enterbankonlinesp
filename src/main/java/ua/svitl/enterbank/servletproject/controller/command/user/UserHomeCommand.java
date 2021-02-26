@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
@@ -44,7 +44,7 @@ public class UserHomeCommand implements Command {
             String sortDir = request.getParameter("sortdir") == null ? "asc" : request.getParameter("sortdir");
 
             List<BankAccountDto> bankAccountDtoList =
-                    bankAccountService.getUserAccounts(user.getUserName(), sortField, sortDir);
+                    bankAccountService.getUserAccounts(user, sortField, sortDir);
 
             request.setAttribute("listBankAccounts", bankAccountDtoList);
 

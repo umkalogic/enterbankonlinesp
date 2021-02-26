@@ -1,0 +1,27 @@
+Steps to set up DB:
+
+1. Create MySQL DB with db_create.sql.
+2. Fill the DB with data: data.sql.
+3. Change connection properties to establish DB connection
+in ua/svitl/enterbank/servletproject/model/dao/impl/ConnectionPoolHolder.java.
+
+
+All users in DB with "USER" role have "user" password.
+Admin has "admin" password.
+
+Steps to set up and run project:
+4.* IDEA: if needed set Java 1.8 in File -> Project Structure -> Project -> Project SDK.
+
+5. IDEA: add Tomcat 9 configuration: Run/Debug Configurations -> (+) Add New Configuration  ->
+Tomcat Server -> Local -> War:exploded artifact (Application Context should be empty).
+
+After you press Run Tomcat 9 (Shift+F10), the webb app should automatically open start page in web browser.
+To stop Tomcat press Stop button twice.
+
+DB structure (choose any format):
+ - mytestbankdb-schema.pdf
+ - mytestbankdb.png
+ - mytestbankdb.uml (should open in IDEA).
+
+
+

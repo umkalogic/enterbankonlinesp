@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command.admin;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
@@ -37,6 +37,7 @@ public class ChangeUserStatusCommand implements Command {
             LOG.debug("Start user change status command: user id={}", request.getParameter("id"));
 
             int id = ParametersUtils.getId(request, "id");
+
             boolean status = "true".equalsIgnoreCase(request.getParameter("isactive"));
 
             userService.updateUserActive(id, status);
@@ -51,7 +52,6 @@ public class ChangeUserStatusCommand implements Command {
         }
 
         LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
-        //todo add infoMessage at admin home page
         return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
     }
 }

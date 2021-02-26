@@ -23,12 +23,11 @@
 
 	<div class="container-fluid">
 		<jsp:include page="../fragments/nav-language.jsp">
-			<jsp:param name="page" value="adminhome"/>
+			<jsp:param name="page" value="showformforuserupdate"/>
+			<jsp:param name="id" value="${requestScope.theuser.userId}"/>
 		</jsp:include>
-		<form action="controller" method="get">
-			<button class="btn btn-md btn-danger btn-block"
-					type="Submit" name="command" value="logout"><fmt:message key="label.logout" /></button>
-		</form>
+		<jsp:include page="../fragments/nav-logout.jsp"/>
+
 
 		<h1><fmt:message key="title.usermanagementsystem" /></h1>
 		<hr>
@@ -46,7 +45,9 @@
 			<br/>
 			<div class="form-control mb-4 col-4">
 			  <label><fmt:message key="user.enabled"/>  ?</label>
-			  <input type="checkbox" name="isactive" value="${requestScope.theuser.active}">
+				<input type="checkbox" name="isactive" id="chk1"
+                 <c:if test="${requestScope.theuser.active}">checked="checked"</c:if>>
+				<input type="hidden" name="isactive" id="chk2" value="0">
 			</div>
 			<button type="submit" name="command" value="submitformforuserupdate" class="btn btn-info col-2"><fmt:message key="user.update"/></button>
 			<br>
@@ -61,6 +62,7 @@
 		</div>
 		<hr>
 		<a href = "${pageContext.servletContext.contextPath}?command=adminhome"><fmt:message key="label.backtouserlist"/></a>
+		<br><br>
 	</div>
 	<script src="../../../static/js/jquery-3.2.1.slim.min.js"></script>
 	<script src="../../../static/js/popper.min.js"></script>

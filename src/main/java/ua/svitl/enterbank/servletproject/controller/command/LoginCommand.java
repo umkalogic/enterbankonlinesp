@@ -2,7 +2,7 @@ package ua.svitl.enterbank.servletproject.controller.command;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.model.service.UserService;
@@ -25,8 +25,6 @@ public class LoginCommand implements Command {
         LOG.debug("LoginCommand starts");
 
         HttpSession session = request.getSession();
-        session.removeAttribute("user");
-        session.removeAttribute("role");
 
         // obtain login and password from a request
         String login = request.getParameter("user_name");

@@ -22,7 +22,8 @@ public class PaymentMapper implements ObjectMapper<Payment> {
         payment.setPaymentAmount(resultSet.getDouble("payment_amount"));
         payment.setSent(resultSet.getBoolean("is_sent"));
         payment.setToBankAccount(resultSet.getString("to_bank_account"));
-        payment.getBankAccount().setBankAccountId(resultSet.getInt("payment.bank_account_id"));
+        payment.setBankAccountId(resultSet.getInt("bank_account_id"));
+        payment.getBankAccount().setBankAccountId(resultSet.getInt("bank_account_id"));
         payment.getBankAccount().setAccountAmount(resultSet.getDouble("account_amount"));
         payment.getBankAccount().setAccountType(resultSet.getString("account_type"));
         payment.getBankAccount().setBankAccountNumber(resultSet.getString("bank_account_number"));
