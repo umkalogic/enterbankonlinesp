@@ -55,4 +55,15 @@ public class PaymentService implements Serializable {
             throw new ServiceException("Couldn't find user payments in DB");
         }
     }
+
+    public boolean deletePaymentForUserById(User user, int id) throws ServiceException {
+        LOG.debug("Start delete payment [{}] for user ==> [ {} ]", id, user);
+        try (PaymentDao dao = daoFactory.createPaymentDao()) {
+            LOG.debug("Start delete payment, id={}", id);
+            return dao.deletePaymentByIdForUser(user, id);
+        } catch (Exception ex) {
+            LOG.error("Couldn't find user [ {} ] payments", user);
+            throw new ServiceException("Couldn't find user payments in DB");
+        }
+    }
 }

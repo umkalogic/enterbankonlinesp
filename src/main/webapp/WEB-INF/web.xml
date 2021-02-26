@@ -70,11 +70,11 @@
   </init-param>
   <init-param>
     <param-name>user</param-name>
-    <param-value>userhome payments showformforpayment createpayment confirmpayment disableaccount enableaccountrequest deletepayment sendpayment</param-value>
+    <param-value>userhome payments showformforpayment createpayment confirmpayment disableaccount enableaccountrequest deletepayment</param-value>
   </init-param>
   <init-param>
     <param-name>all</param-name>
-    <param-value>login logout nocommand changelang error default</param-value>
+    <param-value>logout default</param-value>
   </init-param>
   <init-param>
     <param-name>out-of-control</param-name>

@@ -17,7 +17,7 @@ public class CommandContainer {
     private static final Map<String, Command> commands = new TreeMap<>();
 
     static {
-        // all users commands
+
         commands.put("login", new LoginCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("nocommand", new NoCommand());
@@ -31,12 +31,12 @@ public class CommandContainer {
         commands.put("enableaccountrequest", new EnableAccountRequestCommand());
         commands.put("disableaccount", new DisableAccountCommand());
         commands.put("createpayment", new CreatePaymentCommand());
+        commands.put("deletepayment", new DeletePayment());
 
         // admin commands
         commands.put("adminhome", new AdminHomeCommand());
         commands.put("showusers", new ShowUsersCommand());
         commands.put("showuseraccounts", new ShowUserAccountsCommand());
-
         commands.put("showformforuserupdate", new ShowFormForUserUpdateCommand());
         commands.put("changeuserstatus", new ChangeUserStatusCommand());
         commands.put("changeaccountstatus", new ChangeAccountStatusCommand());

@@ -4,6 +4,7 @@ public final class ControllerConstants {
     // all users pages
     public static final String PAGE_LOGIN = "/WEB-INF/templates/login.jsp";
     public static final String PAGE_ERROR = "/WEB-INF/templates/error.jsp";
+    public static final String PAGE_INDEX = "index.jsp";
 
     // admin pages
     public static final String PAGE_ADMIN_HOME = "/WEB-INF/templates/admin/home.jsp";
@@ -18,7 +19,6 @@ public final class ControllerConstants {
 
     // pagination
     public static final int PAGE_SIZE = 5;
-    public static final String PAGE_INDEX = "index.jsp";
 
     // commands
     public static final String COMMAND_LOGIN = "controller?command=login";
@@ -26,10 +26,10 @@ public final class ControllerConstants {
     public static final String COMMAND_ADMINHOME = "controller?command=adminhome";
     public static final String COMMAND_USERHOME = "controller?command=userhome";
     public static final String COMMAND_ADMIN_SHOW_USER_ACCOUNTS = "controller?command=showuseraccounts";
+    public static final String COMMAND_USER_PAYMENTS = "controller?command=payments";
 
     // attributes
     public static final String ATTR_PAYMENT = "payment";
-
 
     private ControllerConstants() {}
 }

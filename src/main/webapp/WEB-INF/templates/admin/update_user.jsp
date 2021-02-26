@@ -36,31 +36,31 @@
 
 		<div class = "container">
 		<form action="controller" method="POST" role="form">
-			<input type="hidden" name="id" value="${requestScope.theuser.id}">
-			<input type="text" name="username" value="${requestScope.theuser.userName}" class="form-control mb-4 col-4" placeholder="<fmt:message var="label.username"/>" required>
+			<input type="hidden" name="id" value="${requestScope.theuser.userId}">
+			<input type="text" name="username" value="${requestScope.theuser.userName}" class="form-control mb-4 col-4" placeholder="<fmt:message key="label.username"/>" required>
 <%--			<label th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"--%>
 <%--				   class="validation-message"></label>--%>
-			<input type="text" name="email" value="${requestScope.theuser.email}" placeholder="<fmt:message var="label.email"/>" class="form-control mb-4 col-4" required>
+			<input type="text" name="email" value="${requestScope.theuser.email}" placeholder="<fmt:message key="label.email"/>" class="form-control mb-4 col-4" required>
 <%--			<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"--%>
 <%--					class="validation-message"></label>--%>
 			<br/>
 			<div class="form-control mb-4 col-4">
-			  <label><fmt:message var="user.enabled"/>  ?</label>
+			  <label><fmt:message key="user.enabled"/>  ?</label>
 			  <input type="checkbox" name="isactive" value="${requestScope.theuser.active}">
 			</div>
-			<button type="submit" name="command" value="submitformforuserupdate" class="btn btn-info col-2"><fmt:message var="user.update"/></button>
+			<button type="submit" name="command" value="submitformforuserupdate" class="btn btn-info col-2"><fmt:message key="user.update"/></button>
 			<br>
 			<br>
 			<c:if test="${requestScope.errorMessage}">
-			   <h2 class="text-danger"><fmt:message var="${requestScope.errorMessage}"/></h2>
+			   <h2 class="text-danger"><fmt:message key="${requestScope.errorMessage}"/></h2>
 			</c:if>
 			<c:if test="${requestScope.infoMessage}">
-				<p class="text-danger"><fmt:message var="${requestScope.infoMessage}"/></p>
+				<p class="text-danger"><fmt:message key="${requestScope.infoMessage}"/></p>
 			</c:if>
 		</form>
 		</div>
 		<hr>
-		<a href = "${pageContext.servletContext.contextPath}?command=adminhome"><fmt:message var="label.backtouserlist"/></a>
+		<a href = "${pageContext.servletContext.contextPath}?command=adminhome"><fmt:message key="label.backtouserlist"/></a>
 	</div>
 	<script src="../../../static/js/jquery-3.2.1.slim.min.js"></script>
 	<script src="../../../static/js/popper.min.js"></script>

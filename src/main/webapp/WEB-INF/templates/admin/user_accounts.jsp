@@ -33,7 +33,7 @@
     </form>
 
     <div class="container-fluid" style="margin-top:40px;">
-        <span><fmt:message var="text.info.about.user"/> <c:out value="${sessionScope.activeUserName}" /></span>
+        <span><fmt:message key="text.info.about.user"/> <c:out value="${sessionScope.activeUserName}" /></span>
         <hr>
     </div>
 
@@ -42,17 +42,17 @@
             <thead class="thead-dark">
             <tr>
                 <th><a href="${pageContext.servletContext.contextPath}?command=showuseraccounts&id=${requestScope.id}&sortfield=bank_account_number&sortdir=${requestScope.reverseSortDir}"
-                       ><fmt:message var="account.number"/></a>
+                       ><fmt:message key="account.number"/></a>
                 </th>
                 <th><a href="${pageContext.servletContext.contextPath}?command=showuseraccounts&id=${requestScope.id}&sortfield=account_type&sortdir=${requestScope.reverseSortDir}"
-                       ><fmt:message var="account.type"/></a>
+                       ><fmt:message key="account.type"/></a>
                 </th>
-                <th><fmt:message var="account.showAccountCreditCards"/></th>
+                <th><fmt:message key="account.showAccountCreditCards"/></th>
                 <th><a href="${pageContext.servletContext.contextPath}?command=showuseraccounts&id=${requestScope.id}&sortfield=account_amount&sortdir=${requestScope.reverseSortDir}"
-                       ><fmt:message var="account.amount"/></a>
+                       ><fmt:message key="account.amount"/></a>
                 </th>
-                <th><fmt:message var="account.enabled"/></th>
-                <th><fmt:message var="label.actions"/></th>
+                <th><fmt:message key="account.enabled"/></th>
+                <th><fmt:message key="label.actions"/></th>
             </tr>
             </thead>
             <tbody>
@@ -75,22 +75,22 @@
                     <td><fmt:message key="${account.active ? 'account.enabled' : 'account.disabled'}"/></td>
                     <td>
                         <c:if test="${account.active and !account.enableRequest}">
-                            <c:set var="msg" ><fmt:message var="message.disable.bank.account" /></c:set>
+                            <c:set var="msg" ><fmt:message key="message.disable.bank.account" /></c:set>
                         <a href="${pageContext.servletContext.contextPath}?command=disableaccount&id=${account.bankAccountId}"
                            onclick="return confirm(this.getAttribute(${msg}))"
-                           class="btn btn-danger"><fmt:message var="account.disable"/></a>
+                           class="btn btn-danger"><fmt:message key="account.disable"/></a>
                         </c:if>
                         <c:if test="${!account.active and !account.enableRequest}">
-                            <c:set var="msg2" ><fmt:message var="message.enable.bank.account" /></c:set>
+                            <c:set var="msg2" ><fmt:message key="message.enable.bank.account" /></c:set>
                             <a href="${pageContext.servletContext.contextPath}?command=enableaccount&id=${account.bankAccountId}"
                            onclick="return confirm(this.getAttribute(${msg2}))"
-                           class="btn btn-secondary"><fmt:message var="account.enable"/></a>
+                           class="btn btn-secondary"><fmt:message key="account.enable"/></a>
                         </c:if>
                         <c:if test="${account.enableRequest}">
-                            <c:set var="msg3" ><fmt:message var="message.enable.bank.account" /></c:set>
+                            <c:set var="msg3" ><fmt:message key="message.enable.bank.account" /></c:set>
                             <a href="${pageContext.servletContext.contextPath}?command=enableaccount&id=${account.bankAccountId}"
                            class="btn btn-info"
-                           onclick="return confirm(this.getAttribute(${msg3}))"><fmt:message var="account.request.sent"/></a>
+                           onclick="return confirm(this.getAttribute(${msg3}))"><fmt:message key="account.request.sent"/></a>
                         </c:if>
 
 
@@ -104,7 +104,7 @@
         <br>
         <hr>
         <br>
-        <a href = "${pageContext.servletContext.contextPath}/?command=adminhome">label.backtouserlist</a>
+        <a href = "${pageContext.servletContext.contextPath}/?command=adminhome"><fmt:message key="label.backtouserlist"/></a>
         <br>
         <br>
     </div>

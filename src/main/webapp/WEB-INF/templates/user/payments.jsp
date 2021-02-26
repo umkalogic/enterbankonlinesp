@@ -41,14 +41,20 @@
             </div>
             <br>
         </c:if>
+        <c:if test="${requestScope.infoMessage != null}">
+            <div class="container-fluid">
+                <p><c:out value="${requestScope.infoMessage}"/></p>
+            </div>
+            <br>
+        </c:if>
     </div>
 
     <div class="container-fluid">
         <ul class="nav nav-pills">
-            <li class="nav-item"><a class="nav-link active" href="${pageContext.servletContext.contextPath}/controller?command=userhome">
+            <li class="nav-item"><a class="nav-link" href="${pageContext.servletContext.contextPath}/controller?command=userhome">
                 <fmt:message key="accounts.list" />
             </a></li>
-            <li class="nav-item"><a class="nav-link" href="${pageContext.servletContext.contextPath}/controller?command=payments">
+            <li class="nav-item"><a class="nav-link active" href="${pageContext.servletContext.contextPath}/controller?command=payments">
                 <fmt:message key="payments.list" />
             </a></li>
         </ul>
@@ -59,15 +65,15 @@
         <table class = "table table-bordered table-striped table-responsive-md table-hover">
             <thead class="thead-dark">
             <tr>
-                <th><a href="${pageContext.servletContext.contextPath}/controller?command=payments&currentpage=${currentPage}&sortfield=payment_id&sortdir=${reverseSortDir}"
+                <th><a href="${pageContext.servletContext.contextPath}/controller?command=payments&currentpage=${requestScope.currentPage}&sortfield=payment_id&sortdir=${requestScope.reverseSortDir}"
                        ><fmt:message key="payment.paymentId"/></a>
                 </th>
                 <th><fmt:message key="payment.from"/></th>
                 <th><fmt:message key="payment.to"/></th>
-                <th><a href="${pageContext.servletContext.contextPath}/controller?command=payments&currentpage=${currentPage}&sortfield=payment_date&sortdir=${reverseSortDir}"
+                <th><a href="${pageContext.servletContext.contextPath}/controller?command=payments&currentpage=${requestScope.currentPage}&sortfield=payment_date&sortdir=${requestScope.reverseSortDir}"
                        ><fmt:message key="payment.paymentDate"/></a>
                 </th>
-                <th><a href="${pageContext.servletContext.contextPath}/controller?command=payments&currentpage=${currentPage}&sortfield=payment_amount&sortdir=${reverseSortDir}"
+                <th><a href="${pageContext.servletContext.contextPath}/controller?command=payments&currentpage=${requestScope.currentPage}&sortfield=payment_amount&sortdir=${requestScope.reverseSortDir}"
                        ><fmt:message key="payment.paymentAmount"/></a>
                 </th>
                 <th><fmt:message key="payment.paymentStatus"/></th>
@@ -84,19 +90,22 @@
                 <td>${payment.toBankAccount}</td>
                 <td>${f:formatLocalDateTime(payment.paymentDate, 'dd-MM-yyyy HH:mm')}</td>
                 <td style="text-align: right;">${payment.paymentAmount} ${payment.bankAccount.currency}</td>
-                <td><fmt:message var="${payment.sent ? 'payment.sent' : 'payment.notsent'}"/></td>
+                <td><c:choose>
+                    <c:when test="${payment.sent}"><fmt:message key="payment.sent"/></c:when>
+                    <c:otherwise><fmt:message key="payment.notsent"/></c:otherwise>
+                </c:choose></td>
                 <td>
                     <c:if test="${!payment.sent}">
                         <c:set var="msg"><fmt:message key="message.confirm.payment"/></c:set>
                     <a href="${pageContext.servletContext.contextPath}/controller?command=confirmpayment&paymentid=${payment.paymentId}&id=${payment.bankAccountId}&paymentamount=${payment.paymentAmount}&currency=${payment.bankAccount.currency}&bankaccountfrom=${payment.bankAccount.bankAccountNumber}&tobankaccount=${payment.toBankAccount}"
                        onclick="return confirm(this.getAttribute(${msg}))"
-                       class="btn btn-secondary"><fmt:message var="payment.sent.payment"/></a>
+                       class="btn btn-info"><fmt:message key="payment.sent.payment"/></a>
                     </c:if>
                     <c:if test="${!payment.sent}">
                         <c:set var="msg"><fmt:message key="message.confirm.delete"/></c:set>
                     <a href="${pageContext.servletContext.contextPath}/controller?command=deletepayment&paymentid=${payment.paymentId}"
                        onclick="return confirm(this.getAttribute(${msg}))"
-                       class="btn btn-danger"><fmt:message var="payment.delete.payment"/></a>
+                       class="btn btn-danger"><fmt:message key="payment.delete.payment"/></a>
                     </c:if>
                 </td>
             </tr>

@@ -49,7 +49,6 @@ public class SubmitFormForUserUpdateCommand implements Command {
 
             userService.updateUser(user);
 
-
         } catch (ServiceException ex) {
             LOG.error("Error loading user by id");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));

@@ -84,27 +84,27 @@
                         <button class="btn btn-success" name="command" value="showuseraccounts" type="Submit">
                             <fmt:message key="user.showFormForUserAccounts" /></button>
                     </form>
-                    <form class="btn" action="${pageContext.servletContext.contextPath}/controller?command=showformforuserupdate" method="get">
+                    <form class="btn" action="controller" method="get">
                         <input type="hidden" name="id" value="${userdata.userId}" />
-                        <button class="btn btn-warning" type="Submit">
+                        <button class="btn btn-warning" type="Submit" name="command" value="showformforuserupdate">
                             <fmt:message key="user.update" /></button>
                     </form>
                     <c:if test="${userdata.active}">
-                    <form class="btn" action="${pageContext.servletContext.contextPath}/controller?command=changeuserstatus" method="post">
+                    <form class="btn" action="controller" method="post">
                         <input type="hidden" name="id" value="${userdata.userId}" />
                         <input type="hidden" name="isactive" value="false" />
                         <c:set var="msg"><fmt:message key="message.delete"/></c:set>
-                        <button class="btn btn-danger" type="Submit"
+                        <button class="btn btn-danger" type="Submit" name="command" value="changeuserstatus"
                                 onclick="return confirm(${msg})">
                             <fmt:message key="user.deactivate" /></button>
                     </form>
                     </c:if>
                     <c:if test="${not userdata.active}">
-                        <form class="btn" action="${pageContext.servletContext.contextPath}/controller?command=changeuserstatus" method="post">
+                        <form class="btn" action="controller" method="post">
                             <input type="hidden" name="id" value="${userdata.userId}" />
                             <input type="hidden" name="isactive" value="true" />
                             <c:set var="msg"><fmt:message key="message.enable"/></c:set>
-                            <button class="btn btn-secondary" type="Submit"
+                            <button class="btn btn-secondary" type="Submit" name="command" value="changeuserstatus"
                                     onclick="return confirm(${msg})">
                                 <fmt:message key="user.activate" /></button>
                         </form>

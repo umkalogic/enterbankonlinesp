@@ -116,7 +116,7 @@
                         </form>
                     </c:if>
                     <c:if test="${account.enableRequest}">
-                        <span class="btn btn-info">  <fmr:message key="account.request.sent"/></span>
+                        <span class="btn btn-secondary">  <fmr:message key="account.request.sent"/></span>
                     </c:if>
 
                 </td>

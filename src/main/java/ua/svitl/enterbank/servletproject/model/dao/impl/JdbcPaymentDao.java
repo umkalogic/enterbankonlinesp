@@ -3,13 +3,7 @@ package ua.svitl.enterbank.servletproject.model.dao.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.model.dao.PaymentDao;
-import ua.svitl.enterbank.servletproject.model.dao.mapper.BankAccountDtoMapper;
-import ua.svitl.enterbank.servletproject.model.dao.mapper.CreditCardMapper;
 import ua.svitl.enterbank.servletproject.model.dao.mapper.PaymentMapper;
-import ua.svitl.enterbank.servletproject.model.dao.mapper.UserPersonDataMapper;
-import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
-import ua.svitl.enterbank.servletproject.model.dto.CreditCardDto;
-import ua.svitl.enterbank.servletproject.model.dto.UserPersonDataDto;
 import ua.svitl.enterbank.servletproject.model.entity.Payment;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.utils.exception.DaoException;
@@ -18,7 +12,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class JdbcPaymentDao implements PaymentDao {
     private static final Logger LOG = LogManager.getLogger(JdbcPaymentDao.class);
@@ -207,6 +200,20 @@ public class JdbcPaymentDao implements PaymentDao {
             throw new DaoException("Couldn't find user payments in DB");
         }
 
+    }
+
+    @Override
+    public boolean deletePaymentByIdForUser(User user, int id) throws DaoException {
+        LOG.debug("Start delete existing payment for User ==> [ {} ] ==> Payment id ==> [ {} ]", user, id);
+        String query = daoProperties.getProperty("query.delete.payment.by.id.for.user");
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+
+            return true;
+        } catch (SQLException ex) {
+            LOG.error("Couldn't find payment by id={} for user ==> [{}]", id, user);
+            throw new DaoException("Couldn't find payment with such id for given user in DB");
+        }
     }
 
 
