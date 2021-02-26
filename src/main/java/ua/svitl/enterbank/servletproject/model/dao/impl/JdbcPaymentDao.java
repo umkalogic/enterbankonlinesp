@@ -208,11 +208,13 @@ public class JdbcPaymentDao implements PaymentDao {
         String query = daoProperties.getProperty("query.delete.payment.by.id.for.user");
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-
+            statement.setInt(1, id);
+            statement.setInt(2, user.getPersonId());
+            LOG.debug("End delete payment [{}] for given user ==> [ {} ]", id, user);
             return true;
         } catch (SQLException ex) {
-            LOG.error("Couldn't find payment by id={} for user ==> [{}]", id, user);
-            throw new DaoException("Couldn't find payment with such id for given user in DB");
+            LOG.error("Couldn't delete payment by id={} for user ==> [{}]", id, user);
+            throw new DaoException("Couldn't delete payment with id=" + id + " for given user in DB");
         }
     }
 
