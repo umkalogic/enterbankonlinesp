@@ -44,23 +44,26 @@
         <h2><fmt:message key="title.create.payment"/></h2>
 
         <div class = "container">
-            <form autocomplete="off" action="controller" method="POST" role="form">
+            <form action="controller" method="POST" role="form">
                 <input type="hidden" name="id" value="${requestScope.id}">
                 <input type="hidden" name="bankaccountfrom" value="${requestScope.bankaccountfrom}">
                 <span><fmt:message key="payment.from"/>:    ${requestScope.bankaccountfrom}</span><br><br>
                 <span><fmt:message key="payment.to"/>:    </span>
-                <input type="text" name="tobankaccount" required class="form-control mb-4 col-4"
+                <input type="text" name="tobankaccount" required class="form-control col-4"
                 pattern="(\d{14})"><br>
                 <span><fmt:message key="payment.paymentAmount"/>:    </span>
-                <input type="text" name="paymentamount" required class="form-control mb-4 col-4"
-                       data-behaviour="decimal" min="0.01" pattern="(\d+.\d{2})"><span>  ${requestScope.currency}</span>
+                <div class="form-control col-4">
+                <input type="text" name="paymentamount" required
+                       data-behaviour="decimal" min="0.01" pattern="([0-9]+([.][0-9]{0,2})?|[.][0-9]+)"><span>  ${requestScope.currency}</span>
+                </div>
 <%--                <label th:if="${#fields.hasErrors('paymentAmount')}" th:errors="*{paymentAmount}"--%>
 <%--                       class="validation-message"></label>--%>
-                <br>
+                <br><br>
                 <button type="submit" name="command" value="createpayment" class="btn btn-info col-2">
                     <fmt:message key="payment.create"/></button><br><br>
                 <c:if test="${requestScope.errorMessage != null}">
                    <h2 class="text-danger"><fmt:message key="error.message"/></h2>
+                    <p class="text-info">${requestScope.infoMessage}</p>
                 </c:if>
             </form>
         </div>

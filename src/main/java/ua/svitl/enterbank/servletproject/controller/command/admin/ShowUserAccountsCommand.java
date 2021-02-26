@@ -5,7 +5,9 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
-import ua.svitl.enterbank.servletproject.controller.resource.ResourcesBundle;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
+import ua.svitl.enterbank.servletproject.utils.exception.CommandException;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
 import ua.svitl.enterbank.servletproject.model.service.BankAccountService;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
@@ -34,34 +36,38 @@ public class ShowUserAccountsCommand implements Command {
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         try {
             LOG.debug("Start execute command");
-            int id = setId(request);
+
+            int id = ParametersUtils.getId(request, "id");
             LOG.trace("Looking accounts for user id={}", id);
+
+            String sortField = request.getParameter("sortfield") == null ? "bank_account_number" :
+                    request.getParameter("sortfield");
+            String sortDir = request.getParameter("sortdir") == null ? "asc" : request.getParameter("sortdir");
+
             List<BankAccountDto> bankAccountList =
-                    bankAccountService.getUserAccountsById(id, "bank_account_number", "asc");
+                    bankAccountService.getUserAccountsById(id, sortField, sortDir);
 
             request.setAttribute("listBankAccounts", bankAccountList);
 
-            request.setAttribute("sortField", "bank_account_number");
-            request.setAttribute("sortDir", "asc");
-            request.setAttribute("reverseSortDir", "desc");
+            request.setAttribute("sortField", sortField);
+            request.setAttribute("sortDir", sortDir);
+            request.setAttribute("reverseSortDir", "asc".equalsIgnoreCase(sortDir) ? "desc" : "asc");
 
-            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_HOME);
+            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_USER_ACCOUNTS);
             LOG.debug("End execute command");
-            return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
+            return CommandResult.forward(ControllerConstants.PAGE_ADMIN_USER_ACCOUNTS);
+
         } catch (ServiceException ex) {
             LOG.error("Error loading user accounts");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
-            return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
+            request.setAttribute("infoMessage", ex.getMessage());
+        } catch (CommandException ex) {
+            LOG.error("Catch command exception");
+            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
         }
+        LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
+        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
     }
 
-    private static int setId(HttpServletRequest request) {
-        try {
-            return Integer.parseInt(request.getParameter("id"));
-        } catch (NumberFormatException ex) {
-            LOG.error("Couldn't parse to Int ==> {}", ex.getMessage());
-            LOG.trace("Setting id to 1");
-            return 1;
-        }
-    }
 }

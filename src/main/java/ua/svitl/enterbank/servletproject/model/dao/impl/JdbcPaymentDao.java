@@ -3,13 +3,22 @@ package ua.svitl.enterbank.servletproject.model.dao.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.model.dao.PaymentDao;
+import ua.svitl.enterbank.servletproject.model.dao.mapper.BankAccountDtoMapper;
+import ua.svitl.enterbank.servletproject.model.dao.mapper.CreditCardMapper;
+import ua.svitl.enterbank.servletproject.model.dao.mapper.PaymentMapper;
+import ua.svitl.enterbank.servletproject.model.dao.mapper.UserPersonDataMapper;
+import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
+import ua.svitl.enterbank.servletproject.model.dto.CreditCardDto;
+import ua.svitl.enterbank.servletproject.model.dto.UserPersonDataDto;
 import ua.svitl.enterbank.servletproject.model.entity.Payment;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.utils.exception.DaoException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JdbcPaymentDao implements PaymentDao {
     private static final Logger LOG = LogManager.getLogger(JdbcPaymentDao.class);
@@ -23,7 +32,7 @@ public class JdbcPaymentDao implements PaymentDao {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws DaoException {
         try {
             LOG.debug("Closing connection... {}", JdbcPaymentDao.class.getName());
             connection.close();
@@ -82,7 +91,7 @@ public class JdbcPaymentDao implements PaymentDao {
 
 //        INSERT INTO payment (payment_amount, to_bank_account, bank_account_id) \
 //        VALUES (?, (SELECT bank_account_number FROM bank_accounts WHERE bank_account_number = ?), \
-//        (SELECT bank_account_id FROM bank_accounts as ba \
+//        (SELECT ba.bank_account_id FROM bank_accounts as ba \
 //        WHERE ba.person_id = ? AND ba.bank_account_number = ? and ba.account_amount >= ? \
 //        and not ba.bank_account_number = ? \
 //  ) \
@@ -91,6 +100,7 @@ public class JdbcPaymentDao implements PaymentDao {
         String query = daoProperties.getProperty("query.insert.payment.with.check.conditions");
 
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
             statement.setDouble(1, payment.getPaymentAmount()); // payment_amount
             statement.setString(2, payment.getToBankAccount()); // to_bank_account
             statement.setInt(3, user.getPersonId()); // person_id
@@ -101,12 +111,14 @@ public class JdbcPaymentDao implements PaymentDao {
             LOG.trace("QUERY: [ {} ]", query);
             LOG.trace("Statement: [[ {} ]]", statement);
 
-            ResultSet rs = statement.executeQuery();
-            LOG.trace("Mapping payment...");
+            statement.execute();
 
+            ResultSet rs = statement.getGeneratedKeys();
+
+            LOG.trace("Mapping payment...");
             while (rs.next()) {
-                payment.setPaymentId(rs.getInt("payment_id"));
-                payment.setPaymentDate(rs.getTimestamp("payment_date").toLocalDateTime());
+                LOG.trace("Generated id ==> {}", rs.getInt(1));
+                payment.setPaymentId(rs.getInt(1));
             }
 
             LOG.debug("End create payment");
@@ -119,7 +131,7 @@ public class JdbcPaymentDao implements PaymentDao {
 
     @Override
     public boolean updatePayment(User user, Payment payment) throws DaoException {
-        LOG.debug("Start update payment");
+        LOG.debug("Start update existing payment for User ==> [ {} ] ==> Payment ==> [ {} ]", user, payment);
 
 //        UPDATE payment as p, bank_accounts as ba, bank_accounts as b \
 //        SET p.is_sent = true, p.payment_date = CURRENT_TIMESTAMP, \
@@ -130,44 +142,71 @@ public class JdbcPaymentDao implements PaymentDao {
 //        AND b.bank_account_number = ? and b.is_active = true
 
         String query = daoProperties.getProperty("query.update.payment.with.check.conditions");
+        LOG.trace("QUERY: [ {} ]", query);
 
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            LOG.trace("payment.getPaymentAmount() = {}", payment.getPaymentAmount());
             statement.setDouble(1, payment.getPaymentAmount()); // payment_amount
             statement.setDouble(2, payment.getPaymentAmount()); // payment_amount
+            LOG.trace("payment.getPaymentId() = {}", payment.getPaymentId());
             statement.setInt(3, payment.getPaymentId()); // payment_id
+            LOG.trace("payment.getBankAccountId() = {}", payment.getBankAccountId());
             statement.setInt(4, payment.getBankAccountId()); // from bank_account_id
+            LOG.trace("payment.getPaymentAmount() = {}",payment.getPaymentAmount());
             statement.setDouble(5, payment.getPaymentAmount()); // account_amount >=
             statement.setInt(6, user.getPersonId()); // person_id
+            LOG.trace("payment.getToBankAccount() = {}", payment.getToBankAccount());
             statement.setString(7, payment.getToBankAccount()); // to bank_account_number
 
-            LOG.trace("QUERY: [ {} ]", query);
             LOG.trace("Statement: [[ {} ]]", statement);
 
-            connection.setSavepoint();
-            connection.setAutoCommit(false);
+            LOG.debug("End update payment");
+            return statement.execute();
+        } catch (SQLException ex) {
+            LOG.error("Couldn't confirm payment --> {}", ex.getMessage());
+            throw new DaoException("Couldn't perform payment transaction");
+        }
+    }
+
+    @Override
+    public List<Payment> findAllByUser(User user, int offset, int pageSize, String sortField, String sortDir)
+            throws DaoException {
+
+//        query.find.all.payments.for.given.user=SELECT * from payment \
+//        INNER JOIN bank_accounts ba ON payment.bank_account_id = ba.bank_account_id \
+//        WHERE ba.person_id = ?
+
+        LOG.debug("Start get all payments for user ==> {}", user);
+        LOG.debug("Pagination ==> pageSize={}, offset={}", pageSize, offset);
+        LOG.debug("Sort: sortField={}, sortDir={}", sortField, sortDir);
+
+        String query = daoProperties.getProperty("query.find.all.payments.for.given.user") +
+               " ORDER BY " + sortField + " " + sortDir + " LIMIT " + pageSize + " OFFSET " + offset + ";";
+
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, user.getPersonId());
+
+            LOG.trace("QUERY: [ {} ]", query);
+            LOG.trace("STATEMENT [[ {} ]]", statement);
+
+            List<Payment> payments = new ArrayList<>();
 
             ResultSet rs = statement.executeQuery();
 
-            connection.commit();
-
-            LOG.trace("Mapping payment...");
-
+            LOG.trace("Mapping payments...");
             while (rs.next()) {
-                payment.setPaymentId(rs.getInt("payment_id"));
-                payment.setPaymentDate(rs.getTimestamp("payment_date").toLocalDateTime());
+                PaymentMapper paymentMapper = new PaymentMapper();
+                Payment payment = paymentMapper.map(rs);
+                payments.add(payment);
             }
 
-            LOG.debug("End update payment");
-            return true;
+            LOG.debug("End get all payments for given user ==> [[ {} ]]", payments);
+            return payments;
         } catch (SQLException ex) {
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                LOG.error("Couldn't rollback --> {}", e.getMessage());
-            }
-            LOG.error("Couldn't confirm payment --> {}", ex.getMessage());
-            throw new DaoException("Couldn't perform payment transacton");
+            LOG.error("Couldn't find user payments --> {}", ex.getMessage());
+            throw new DaoException("Couldn't find user payments in DB");
         }
+
     }
 
 

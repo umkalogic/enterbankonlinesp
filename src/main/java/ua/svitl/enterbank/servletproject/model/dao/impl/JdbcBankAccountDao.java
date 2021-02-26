@@ -184,4 +184,24 @@ public class JdbcBankAccountDao implements BankAccountDao {
         }
     }
 
+    @Override
+    public boolean updateAccountIsActive(int id, boolean active) throws DaoException {
+        LOG.debug("Start update bank account (id = {}): isActive ==> {}", id, active);
+        String query = daoProperties.getProperty("query.update.bank.account.is.active");
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setBoolean(1, active);
+            statement.setInt(2, id);
+            LOG.trace("QUERY: [ {} ], VALUES ({}, {})", query, active, id);
+            LOG.trace("Statement ==> [{}]", statement);
+
+            statement.execute();
+
+            LOG.debug("End update bank account is_active : {}", active);
+            return true;
+        } catch (SQLException e) {
+            LOG.error("Couldn't update bank account status in DB: id = {}", id);
+            throw new DaoException("Couldn't update bank account (id="+ id + ") status in DB.");
+        }
+    }
+
 }

@@ -36,10 +36,11 @@ public class CommandContainer {
         commands.put("adminhome", new AdminHomeCommand());
         commands.put("showusers", new ShowUsersCommand());
         commands.put("showuseraccounts", new ShowUserAccountsCommand());
-        commands.put("changeuserstatus", new ChangeUserStatusCommand());
+
         commands.put("showformforuserupdate", new ShowFormForUserUpdateCommand());
-        commands.put("submitformforuserupdate", new SubmitFormForUserUpdateCommand());
+        commands.put("changeuserstatus", new ChangeUserStatusCommand());
         commands.put("changeaccountstatus", new ChangeAccountStatusCommand());
+        commands.put("submitformforuserupdate", new SubmitFormForUserUpdateCommand());
 
         LOG.debug("Command container was successfully initialized");
         LOG.trace("Number of commands: {}", commands.size());

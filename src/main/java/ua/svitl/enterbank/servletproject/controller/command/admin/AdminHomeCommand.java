@@ -5,7 +5,8 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
-import ua.svitl.enterbank.servletproject.controller.resource.ResourcesBundle;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.dto.UserPersonDataDto;
 import ua.svitl.enterbank.servletproject.model.service.UserService;
 import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
@@ -38,14 +39,8 @@ public class AdminHomeCommand implements Command {
                     userService.getAllUsers(1, pageSize + 1, "user_name", "asc");
 
             request.setAttribute("listUserPersonData", userList);
-            request.setAttribute("currentPage", 1);
-            request.setAttribute("pageSize", pageSize);
-            request.setAttribute("prev", false);
-            request.setAttribute("next", userList.size() == pageSize + 1);
-
-            request.setAttribute("sortField", "user_name");
-            request.setAttribute("sortDir", "asc");
-            request.setAttribute("reverseSortDir", "desc");
+            ParametersUtils.setPaginationAttributes(request, "user_name", "asc", 1,
+                    pageSize, userList.size());
 
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_HOME);
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);

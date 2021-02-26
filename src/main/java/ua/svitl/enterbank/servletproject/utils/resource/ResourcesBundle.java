@@ -1,4 +1,4 @@
-package ua.svitl.enterbank.servletproject.controller.resource;
+package ua.svitl.enterbank.servletproject.utils.resource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

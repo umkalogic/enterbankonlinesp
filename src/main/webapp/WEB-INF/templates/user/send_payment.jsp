@@ -47,17 +47,21 @@
         <div class = "container">
             <form autocomplete="off" action="controller" method="POST" role="form" class="form-group"
             style="border:1px dashed #383d41; padding: 20px;">
+                <input type="hidden" name="id" value="${requestScope.payment.bankAccountId}">
                 <input type="hidden" name="paymentid" value="${requestScope.payment.paymentId}">
-                <span class="col-6 form-control-plaintext"><fmt:message key="payment.from"/>:    ${requestScope.payment.bankAccountId}</span><br>
+                <input type="hidden" name="bankaccountfrom" value="${requestScope.payment.bankAccount.bankAccountNumber}">
+                <span class="col-6 form-control-plaintext"><fmt:message key="payment.from"/>:    ${requestScope.payment.bankAccount.bankAccountNumber}</span><br>
                 <br>
                 <span class="col-2 form-control-plaintext"><fmt:message key="payment.to"/>:    </span>
-                <input type="text" name="tobankaccount" value="${requestScope.payment.toBankAccount}" disabled class="form-control mb-4 col-4">
+                <input type="hidden" name="tobankaccount" value="${requestScope.payment.toBankAccount}">
+                <span  class="form-control mb-4 col-4">${requestScope.payment.toBankAccount}</span>
                 <br>
                 <span class="col-2 form-control-plaintext"><fmt:message key="payment.paymentAmount"/>:    </span>
-                <input type="text" name="paymentamount" value="${requestScope.payment.paymentAmount}" disabled class="form-control mb-4 col-4">
+                <input type="hidden" name="paymentamount" value="${requestScope.payment.paymentAmount}">
+                <span class="form-control mb-4 col-4">${requestScope.payment.paymentAmount} ${requestScope.currency}</span>
                 <br>
-                <button type="submit" class="btn btn-info col-2"><fmt:message key="payment.confirm"/></button>
-                <c:if test="${!requestScope.payment.isSent}">
+                <button type="submit" name="command" value="confirmpayment" class="btn btn-info col-2"><fmt:message key="payment.confirm"/></button>
+                <c:if test="${!requestScope.payment.sent}">
                 <form action="controller" method="post" class="btn">
                     <input type="hidden" name="id" value="${requestScope.payment.paymentId}">
                     <c:set var="msg"><fmt:message key="message.confirm.delete"/></c:set>
@@ -69,6 +73,7 @@
                 <br>
                 <c:if test="${requestScope.errorMessage != null}">
                     <h2 class="text-danger"><fmt:message key="error.message"/></h2>
+                    <p class="text-info">${requestScope.infoMessage}</p>
                 </c:if>
 
             </form>

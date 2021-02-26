@@ -45,4 +45,13 @@ public class BankAccountService implements Serializable {
         return BankAccountDtoToBankAccountMapper.mapToBankAccount(bankAccountDto);
     }
 
+    public boolean updateAccountActive(int id, boolean status) throws ServiceException {
+        try (BankAccountDao dao = daoFactory.createBankAccountDao()) {
+            LOG.debug("Start change user status ==> id={}", id);
+            return dao.updateAccountIsActive(id, status);
+        } catch (Exception ex) {
+            LOG.error("Couldn't update bank account with id = {}", id);
+            throw new ServiceException("Couldn't update bank account with id = " + id);
+        }
+    }
 }

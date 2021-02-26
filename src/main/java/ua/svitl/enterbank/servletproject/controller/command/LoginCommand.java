@@ -3,17 +3,14 @@ package ua.svitl.enterbank.servletproject.controller.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
-import ua.svitl.enterbank.servletproject.controller.resource.ResourcesBundle;
-import ua.svitl.enterbank.servletproject.model.dto.UserPersonDataDto;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.model.service.UserService;
-import ua.svitl.enterbank.servletproject.utils.exception.AppException;
 import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;

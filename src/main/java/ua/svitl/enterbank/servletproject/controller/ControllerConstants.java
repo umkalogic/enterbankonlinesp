@@ -25,9 +25,11 @@ public final class ControllerConstants {
     public static final String COMMAND_LOGOUT = "controller?command=logout";
     public static final String COMMAND_ADMINHOME = "controller?command=adminhome";
     public static final String COMMAND_USERHOME = "controller?command=userhome";
+    public static final String COMMAND_ADMIN_SHOW_USER_ACCOUNTS = "controller?command=showuseraccounts";
 
     // attributes
     public static final String ATTR_PAYMENT = "payment";
+
 
     private ControllerConstants() {}
 }

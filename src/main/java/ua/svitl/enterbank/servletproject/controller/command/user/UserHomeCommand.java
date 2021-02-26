@@ -5,9 +5,8 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
-import ua.svitl.enterbank.servletproject.controller.resource.ResourcesBundle;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
-import ua.svitl.enterbank.servletproject.model.entity.BankAccount;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.model.service.BankAccountService;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
@@ -36,8 +35,10 @@ public class UserHomeCommand implements Command {
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         try {
             LOG.debug("Start execute command");
+
             User user = (User) session.getAttribute("user");
             LOG.trace("Logged user: {}", user);
+
             String sortField = request.getParameter("sortfield") == null ? "bank_account_number" :
                     request.getParameter("sortfield");
             String sortDir = request.getParameter("sortdir") == null ? "asc" : request.getParameter("sortdir");

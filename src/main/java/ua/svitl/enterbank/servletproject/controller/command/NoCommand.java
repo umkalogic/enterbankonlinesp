@@ -3,7 +3,7 @@ package ua.svitl.enterbank.servletproject.controller.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
-import ua.svitl.enterbank.servletproject.controller.resource.ResourcesBundle;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

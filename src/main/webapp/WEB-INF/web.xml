@@ -70,7 +70,7 @@
   </init-param>
   <init-param>
     <param-name>user</param-name>
-    <param-value>userhome payments showformforpayment createpayment disableaccount enableaccountrequest confirmpayment deletepayment sendpayment</param-value>
+    <param-value>userhome payments showformforpayment createpayment confirmpayment disableaccount enableaccountrequest deletepayment sendpayment</param-value>
   </init-param>
   <init-param>
     <param-name>all</param-name>

@@ -15,12 +15,12 @@ public class ConnectionPoolHolder {
 
     static {
         config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/mytestdb?serverTimezone=UTC&useSSL=true" +
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/mytestbankdb?serverTimezone=UTC&useSSL=true" +
                 "&useUnicode=yes&characterEncoding=UTF-8");
         config.setUsername("sveta");
         config.setPassword("sveta");
         config.setAutoCommit(true);
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(12);
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
         ds = new HikariDataSource(config);
     }

@@ -33,8 +33,10 @@ public class ShowFormForPaymentCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Start execute command");
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+
         LOG.trace("Logged user: {}", user);
         LOG.trace("Making payment from account id: {}; account number: {}",
                 request.getParameter("id"), request.getParameter("bankaccountfrom"));

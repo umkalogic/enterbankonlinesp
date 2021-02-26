@@ -14,4 +14,5 @@ public interface BankAccountDao extends IDao<BankAccount, Integer> {
     List<BankAccountDto> getUserAccountsById(int id, String sortField, String sortDir) throws DaoException;
     boolean exists(BankAccount bankAccount) throws DaoException;
     boolean isActive(BankAccount bankAccount) throws DaoException;
+    boolean updateAccountIsActive(int id, boolean status) throws DaoException;
 }

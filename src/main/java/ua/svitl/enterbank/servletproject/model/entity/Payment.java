@@ -75,7 +75,7 @@ public class Payment implements Serializable {
         this.sent = sent;
     }
 
-    public Boolean isSent() {
+    public Boolean getSent() {
         return sent;
     }
 

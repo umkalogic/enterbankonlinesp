@@ -38,6 +38,11 @@
             <h3 style="color:darkred"><c:out value="${requestScope.errorMessage}"/></h3>
         </div>
     </c:if>
+    <c:if test="${requestScope.infoMessage != null}">
+        <div class="container-fluid">
+            <p><c:out value="${requestScope.infoMessage}"/></p>
+        </div>
+    </c:if>
     <div class="container-fluid">
         <h1><fmt:message key="users.list" /></h1>
         <table class = "table table-bordered table-striped table-responsive-md table-hover" id="userpersondata">

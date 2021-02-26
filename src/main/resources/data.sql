@@ -1,4 +1,5 @@
--- ALTER DATABASE mytestdb CHARACTER SET utf8 COLLATE utf8_general_cs;
+use `mytestbankdb`
+
 REPLACE INTO `roles` VALUES (1,'ADMIN');
 REPLACE INTO `roles` VALUES (2,'USER');
 
@@ -171,9 +172,19 @@ REPLACE INTO `credit_card` (credit_card_id, card_name, card_number, cvc2, expire
     VALUES (10, 'VISA', 1010101088880010, 111, '2022-06-30 23-59-59', 1, '2020-06-08 00-00-00',
         'Anna Yuzerovska', 8);
 
-REPLACE INTO `payment` (payment_id, is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (1, 1, 200.00, '26320130000008', 3);
-REPLACE INTO `payment` (payment_id, is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (2, 1, 200.00, '26320130000008', 2);
-REPLACE INTO `payment` (payment_id, is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (3, 0, 300.00, '26320130000008', 2);
-REPLACE INTO `payment` (payment_id, is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (4, 1, 100.00, '26320130000003', 3);
-REPLACE INTO `payment` (payment_id, is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (5, 0, 200.00, '26320130000002', 3);
-REPLACE INTO `payment` (payment_id, is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (6, 0, 300.00, '26320130000002', 2);
+REPLACE INTO `payment` (is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (1, 200.00, '26320130000008', 3);
+REPLACE INTO `payment` (is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (1, 200.00, '26320130000008', 2);
+REPLACE INTO `payment` (is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (0, 300.00, '26320130000008', 2);
+REPLACE INTO `payment` (is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (1, 100.00, '26320130000002', 3);
+REPLACE INTO `payment` (is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (0, 200.00, '26320130000002', 3);
+REPLACE INTO `payment` (is_sent, payment_amount, to_bank_account, bank_account_id) VALUES (0, 300.00, '26320130000003', 2);
+
+REPLACE INTO `person_addresses` (person_id, address_id) VALUES (1, 1);
+REPLACE INTO `person_addresses` (person_id, address_id) VALUES (2, 2);
+REPLACE INTO `person_addresses` (person_id, address_id) VALUES (3, 3);
+REPLACE INTO `person_addresses` (person_id, address_id) VALUES (4, 4);
+REPLACE INTO `person_addresses` (person_id, address_id) VALUES (5, 5);
+REPLACE INTO `person_addresses` (person_id, address_id) VALUES (6, 6);
+REPLACE INTO `person_addresses` (person_id, address_id) VALUES (7, 7);
+
+

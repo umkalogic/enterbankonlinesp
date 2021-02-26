@@ -5,7 +5,8 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
-import ua.svitl.enterbank.servletproject.controller.resource.ResourcesBundle;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.dto.UserPersonDataDto;
 import ua.svitl.enterbank.servletproject.model.service.UserService;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils.getIntOrOne;
 
 public class ShowUsersCommand implements Command {
     private static final long serialVersionUID = -5000523440278557319L;
@@ -34,7 +37,7 @@ public class ShowUsersCommand implements Command {
         try {
             LOG.debug("Start show users command");
             int pageSize = ControllerConstants.PAGE_SIZE;
-            int pageNo = setPageNo(request);
+            int pageNo = getIntOrOne(request, "currentpage");
 
             String sortField = request.getParameter("sortfield");
             String sortDir = request.getParameter("sortdir");
@@ -46,15 +49,9 @@ public class ShowUsersCommand implements Command {
                     userService.getAllUsers(pageNo, pageSize + 1, sortField, sortDir);
 
             userList.forEach(e -> LOG.debug(e.toString()));
-            request.setAttribute("listUserPersonData", userList);
-            request.setAttribute("currentPage", pageNo);
-            request.setAttribute("pageSize", pageSize);
-            request.setAttribute("prev", pageNo > 1);
-            request.setAttribute("next", userList.size() == pageSize + 1);
 
-            request.setAttribute("sortField", sortField);
-            request.setAttribute("sortDir", sortDir);
-            request.setAttribute("reverseSortDir", "asc".equalsIgnoreCase(sortDir) ? "desc" : "asc");
+            request.setAttribute("listUserPersonData", userList);
+            ParametersUtils.setPaginationAttributes(request, sortField, sortDir, pageNo, pageSize, userList.size());
 
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_HOME);
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
@@ -68,13 +65,5 @@ public class ShowUsersCommand implements Command {
         }
     }
 
-    private static int setPageNo(HttpServletRequest request) {
-        try {
-            return Integer.parseInt(request.getParameter("currentpage"));
-        } catch (NumberFormatException ex) {
-            LOG.error("Couldn't parse to Int ==> {}", ex.getMessage());
-            LOG.trace("Setting currentpage to 1");
-            return 1;
-        }
-    }
+
 }

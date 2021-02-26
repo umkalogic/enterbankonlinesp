@@ -1,4 +1,4 @@
-package ua.svitl.enterbank.servletproject.controller.resource;
+package ua.svitl.enterbank.servletproject.utils.resource;
 
 import java.util.HashSet;
 import java.util.Set;

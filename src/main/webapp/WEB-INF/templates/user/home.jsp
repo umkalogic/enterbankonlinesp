@@ -82,7 +82,7 @@
                     <div>
                         <span class="cards">${card.cardNumber}</span>
                         <span>  ${card.cardName}</span>
-                        <span>, ${card.expireDate}</span>
+                        <span>, ${f:formatLocalDateTime(card.expireDate, 'MM/yyyy')}</span>
                         <span>, ${card.ownerName}</span>
                     </div>
                     </c:forEach>

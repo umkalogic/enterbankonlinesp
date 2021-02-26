@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.controller.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
 import ua.svitl.enterbank.servletproject.model.entity.Payment;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.model.service.PaymentService;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static ua.svitl.enterbank.servletproject.controller.command.user.utils.PaymentUtils.*;
+import static ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils.*;
 
 public class CreatePaymentCommand implements Command {
     private static final long serialVersionUID = 4339457107093951826L;
@@ -37,12 +38,15 @@ public class CreatePaymentCommand implements Command {
         User user = (User) session.getAttribute("user");
         LOG.trace("Logged user: {}", user);
         try {
-            LOG.trace("Creating new payment");
+            LOG.trace("Creating new payment: id={}", request.getParameter("id"));
+
+            ParametersUtils.bankAccountAttributes(request);
             Payment payment = new Payment();
-            payment.setBankAccountId(setId(request));
             payment.setToBankAccount(getString(request, "tobankaccount"));
-            payment.setPaymentAmount(setAmount(request));
+            payment.setPaymentAmount(getAmount(request));
             String bankAccountNumber = getString(request, "bankaccountfrom");
+            payment.getBankAccount().setBankAccountNumber(bankAccountNumber);
+            payment.getBankAccount().setCurrency(request.getParameter("currency"));
 
             payment = paymentService.createPayment(user, payment, bankAccountNumber);
 
@@ -56,11 +60,13 @@ public class CreatePaymentCommand implements Command {
         } catch (ServiceException ex) {
             LOG.error("Exception in DB ==> ", ex);
             request.setAttribute("errorMessage", ex.getMessage());
+            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_HOME);
             return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
         } catch (CommandException ex) {
             LOG.error("Exception in form data ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", ex.getMessage());
-            return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
+            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_MAKE_PAYMENT);
+            return CommandResult.forward(ControllerConstants.PAGE_USER_MAKE_PAYMENT);
         }
     }
 
