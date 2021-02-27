@@ -38,6 +38,7 @@ public class ConfirmPaymentCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Start execute command");
         HttpSession session = request.getSession();
+        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
         LOG.trace("Logged user: {}", user);
 
@@ -46,11 +47,13 @@ public class ConfirmPaymentCommand implements Command {
             ParametersUtils.bankAccountAttributes(request);
 
             Payment payment = new Payment();
-            payment.setBankAccountId(ParametersUtils.getId(request, "id"));
-            payment.setPaymentId(ParametersUtils.getId(request, "paymentid"));
-            payment.setToBankAccount(ParametersUtils.getString(request, "tobankaccount", "Bank account number must consist of 14 digits"));
+            payment.setBankAccountId(ParametersUtils.getId(request, "id", rb.getString("wrong.id")));
+            payment.setPaymentId(ParametersUtils.getId(request, "paymentid", rb.getString("wrong.id")));
+            payment.setToBankAccount(ParametersUtils.getString(request, "tobankaccount",
+                    rb.getString("form.validation.message.bank.account.number")));
             payment.setPaymentAmount(ParametersUtils.getAmount(request));
-            String bankAccountNumber = ParametersUtils.getString(request, "bankaccountfrom", "Bank account number must consist of 14 digits");
+            String bankAccountNumber = ParametersUtils.getString(request, "bankaccountfrom",
+                    rb.getString("form.validation.message.bank.account.number"));
             payment.getBankAccount().setBankAccountNumber(bankAccountNumber);
             payment.getBankAccount().setCurrency(request.getParameter("currency"));
             request.setAttribute("payment", payment);
@@ -65,18 +68,17 @@ public class ConfirmPaymentCommand implements Command {
             return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS);
 
         } catch (ServiceException ex) {
-            LOG.error("Couldn't confirm payment");
-            ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+            LOG.error("Couldn't confirm payment ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.confirm.payment"));
             request.setAttribute("infoMessage", ex.getMessage());
-            return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
+            
         } catch (CommandException ex) {
             LOG.error("Error in payment data ==> {}", ex.getMessage());
-            request.setAttribute("errorMessage", ex.getMessage());
-
-            return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
         }
-
+        //todo add params to to confirmpayment with params: id, paymentid, toba, bafrom
+        return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
     }
 
 }

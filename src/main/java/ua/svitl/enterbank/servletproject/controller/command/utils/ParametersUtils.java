@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.utils.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ResourceBundle;
 
 public class ParametersUtils {
     private static final Logger LOG = LogManager.getLogger(ParametersUtils.class);
@@ -20,12 +21,12 @@ public class ParametersUtils {
         return str;
     }
 
-    public static int getId(HttpServletRequest request, String param) throws CommandException {
+    public static int getId(HttpServletRequest request, String param, String errorMessage) throws CommandException {
         try {
             return Integer.parseInt(request.getParameter(param));
         } catch (NumberFormatException ex) {
             LOG.error("Couldn't parse to Int ==> {}", ex.getMessage());
-            throw new CommandException("Wrong id");
+            throw new CommandException(errorMessage);
         }
     }
 
@@ -60,11 +61,19 @@ public class ParametersUtils {
         request.setAttribute("reverseSortDir", "asc".equalsIgnoreCase(sortDir) ? "desc" : "asc");
     }
 
-    public static void bankAccountAttributes(HttpServletRequest request) throws CommandException {
+    public static void bankAccountAttributes(HttpServletRequest request) {
         request.setAttribute("currency", request.getParameter("currency"));
         request.setAttribute("id", request.getParameter("id"));
         request.setAttribute("bankaccountfrom", request.getParameter("bankaccountfrom"));
         request.setAttribute("tobankaccount", request.getParameter("tobankaccount"));
         request.setAttribute("paymentamount", request.getParameter("paymentamount"));
+    }
+
+    public static boolean checkIfNull(HttpServletRequest request, String param, String errorMessage) throws CommandException {
+        if (request.getParameter(param) == null) {
+            throw new CommandException(errorMessage);
+        } else {
+            return false;
+        }
     }
 }

@@ -49,15 +49,17 @@
                 <input type="hidden" name="bankaccountfrom" value="${requestScope.bankaccountfrom}">
                 <span><fmt:message key="payment.from"/>:    ${requestScope.bankaccountfrom}</span><br><br>
                 <span><fmt:message key="payment.to"/>:    </span>
+                <c:set var="msg"><fmt:message key="form.validation.message.bank.account.number"/></c:set>
                 <input type="text" name="tobankaccount" required class="form-control col-4"
-                pattern="(\d{14})"><br>
+                pattern="(\d{14})" oninvalid="this.setCustomValidity('${msg}')" oninput="this.setCustomValidity('')"><br>
                 <span><fmt:message key="payment.paymentAmount"/>:    </span>
                 <div class="form-control col-4">
+                    <c:set var="msg2"><fmt:message key="form.validation.message.payment.amount"/></c:set>
                 <input type="text" name="paymentamount" required
-                       data-behaviour="decimal" min="0.01" pattern="([0-9]+([.][0-9]{0,2})?|[.][0-9]+)"><span>  ${requestScope.currency}</span>
+                       data-behaviour="decimal" min="0.01" pattern="([0-9]+([.][0-9]{0,2})?|[.][0-9]+)"
+                       oninvalid="this.setCustomValidity('${msg2}')" oninput="this.setCustomValidity('')"><span><c:out value="${param.currency}"/></span>
                 </div>
-<%--                <label th:if="${#fields.hasErrors('paymentAmount')}" th:errors="*{paymentAmount}"--%>
-<%--                       class="validation-message"></label>--%>
+                <input type="hidden" name="currency" value="${requestScope.currency}">
                 <br><br>
                 <button type="submit" name="command" value="createpayment" class="btn btn-info col-2">
                     <fmt:message key="payment.create"/></button><br><br>

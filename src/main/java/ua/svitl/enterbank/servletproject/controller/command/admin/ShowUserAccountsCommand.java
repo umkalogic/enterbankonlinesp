@@ -37,11 +37,14 @@ public class ShowUserAccountsCommand implements Command {
         try {
             LOG.debug("Start execute command");
 
-            int id = ParametersUtils.getId(request, "id");
+            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
+            int id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
+
             LOG.trace("Looking accounts for user id={}", id);
 
             String sortField = request.getParameter("sortfield") == null ? "bank_account_number" :
                     request.getParameter("sortfield");
+
             String sortDir = request.getParameter("sortdir") == null ? "asc" : request.getParameter("sortdir");
 
             List<BankAccountDto> bankAccountList =
@@ -56,11 +59,12 @@ public class ShowUserAccountsCommand implements Command {
 
 
         } catch (ServiceException ex) {
-            LOG.error("Error loading user accounts");
+            LOG.error("Error loading user accounts ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+
         } catch (CommandException ex) {
-            LOG.error("Catch command exception");
+            LOG.error("Catch command exception ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         }

@@ -36,22 +36,27 @@ public class ChangeUserStatusCommand implements Command {
         try {
             LOG.debug("Start user change status command: user id={}", request.getParameter("id"));
 
-            int id = ParametersUtils.getId(request, "id");
+            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
+
+            int id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
 
             boolean status = "true".equalsIgnoreCase(request.getParameter("isactive"));
 
             userService.updateUserActive(id, status);
 
         } catch (ServiceException ex) {
-            LOG.error("Error loading user by id");
+            LOG.error("Error loading user by id ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            LOG.error("Validation error ==> {}", ex.getMessage());
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         }
 
         LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
-        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
+        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
+                "&errormessage=" + request.getAttribute("errorMessage") +
+                "&infomessage=" + request.getAttribute("infoMessage"));
     }
 }

@@ -35,10 +35,13 @@ public class ShowFormForUserUpdateCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+        Integer id = null;
         try {
+            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
+
+            id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
             LOG.debug("Start show form for user update command: user id={}", request.getParameter("id"));
 
-            int id = ParametersUtils.getId(request, "id");
             Optional<UserDto> user = userService.getUserById(id);
 
             if (!user.isPresent()) {
@@ -50,14 +53,19 @@ public class ShowFormForUserUpdateCommand implements Command {
 
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_UPDATE_USER);
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_UPDATE_USER);
+
         } catch (ServiceException ex) {
-            LOG.error("Error loading user by id");
+            LOG.error("Error loading user by id ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         }
-        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
+
+        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
+                "&errormessage=" + request.getAttribute("errorMessage") +
+                "&infomessage" + request.getAttribute("infoMessage"));
     }
 }

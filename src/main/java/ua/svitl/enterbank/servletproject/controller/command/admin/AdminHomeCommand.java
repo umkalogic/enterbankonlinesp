@@ -51,6 +51,14 @@ public class AdminHomeCommand implements Command {
             ParametersUtils.setPaginationAttributes(request, "user_name", "asc", 1,
                     pageSize, userList.size());
 
+            if (request.getParameter("infomessage") != null) {
+                request.setAttribute("infoMessage", request.getParameter("infomessage"));
+            }
+
+            if (request.getParameter("errormessage") != null) {
+                request.setAttribute("errorMessage", request.getParameter("errormessage"));
+            }
+
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_HOME);
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
         } catch (ServiceException ex) {

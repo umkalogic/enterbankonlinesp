@@ -35,20 +35,27 @@ public class SubmitFormForUserUpdateCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+        Integer id = null;
         try {
-            LOG.debug("Start user update command: user id={}", request.getParameter("id"));
+            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
+            id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
 
-            int id = ParametersUtils.getId(request, "id");
-            String userName = ParametersUtils.getString(request, "username", "User name cannot be null");
-            String email = ParametersUtils.getString(request, "email", "Email cannot be null");
+            String userName = ParametersUtils.getString(request, "username",
+                    rb.getString("cannot.be.null"));
+            //todo check username pattern: consist of min 5 letters and start from a letter
+
+            String email = ParametersUtils.getString(request, "email",  rb.getString("cannot.be.null"));
+            //todo check email pattern: should correspond to standard email format
 
             String[] isactives = request.getParameterValues("isactive");
             Arrays.stream(isactives).forEach(e -> LOG.debug("ISACTIVES: {}", e));
 
             boolean active = false;
-            if(isactives.length > 1) { //If checkbox is checked than assign it with true or 1
+            if(isactives.length > 1) { // If checkbox is checked than assign it with true or 1
                 active = true;
             }
+
+            LOG.debug("Start user update command: user id={}", id);
 
             User user = new User();
             user.setUserId(id);
@@ -58,16 +65,31 @@ public class SubmitFormForUserUpdateCommand implements Command {
 
             userService.updateUser(user);
 
+            request.setAttribute("infoMessage", rb.getString("user.update.successfull"));
+            LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
+            return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
+                    "&infomessage" + rb.getString("user.update.successfull"));
+
         } catch (ServiceException ex) {
-            LOG.error("Error loading user by id");
+            LOG.error("Error loading user by id ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            LOG.error("Validation error in user update form ==> {}", ex.getMessage());
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+            if (id == null) {
+                return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
+                        "&errormessage=" + request.getAttribute("errorMessage") +
+                        "&infomessage=" + request.getAttribute("infoMessage"));
+            }
         }
 
-        LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
-        return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
+        return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE +
+                "&id=" + request.getParameter("id") +
+                "&errormessage=" + request.getAttribute("errorMessage") +
+                "&infomessage" + request.getAttribute("infoMessage"));
+
     }
 }

@@ -42,6 +42,8 @@ public class CreatePaymentCommand implements Command {
             Payment payment = new Payment();
             payment.setToBankAccount(ParametersUtils.getString(request, "tobankaccount",
                     "Bank account must consist of 14 digits"));
+            //todo add backend validation for bank account numbers: 14 digits
+
             payment.setPaymentAmount(ParametersUtils.getAmount(request));
             String bankAccountNumber = ParametersUtils.getString(request, "bankaccountfrom",
                     "Bank account must consist of 14 digits");
@@ -57,15 +59,23 @@ public class CreatePaymentCommand implements Command {
 
             LOG.debug("End execute command");
             return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
+
         } catch (ServiceException ex) {
             LOG.error("Exception in DB ==> ", ex);
             request.setAttribute("errorMessage", ex.getMessage());
+            //todo add infoMessage attribute
             LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
+
+            //todo add infomessage/errormessage parameters
             return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
         } catch (CommandException ex) {
             LOG.error("Exception in form data ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", ex.getMessage());
+            //todo add infoMessage attribute
+
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_MAKE_PAYMENT);
+
+            //todo add infomessage/errormessage parameters
             return CommandResult.forward(ControllerConstants.PAGE_USER_MAKE_PAYMENT);
         }
     }

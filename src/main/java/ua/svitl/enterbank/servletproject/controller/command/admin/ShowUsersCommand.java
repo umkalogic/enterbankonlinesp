@@ -55,10 +55,13 @@ public class ShowUsersCommand implements Command {
 
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_HOME);
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
+
         } catch (ServiceException ex) {
             LOG.error("AdminHome: error loading users list");
+
             HttpSession session = request.getSession();
             ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+
             LOG.debug("Get resource bundle locale ==> {}", rb.getLocale());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
