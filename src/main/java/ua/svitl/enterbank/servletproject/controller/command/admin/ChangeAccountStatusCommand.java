@@ -33,15 +33,17 @@ public class ChangeAccountStatusCommand implements Command {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         try {
-            LOG.debug("Start account change status command: account id={}", request.getParameter("id"));
+            LOG.debug("Start account change status command: user id={}, ba_id={}",
+                    request.getParameter("id"), request.getParameter("baid"));
 
             int id = ParametersUtils.getId(request, "id");
+            int baid = ParametersUtils.getId(request, "baid");
             boolean status = "true".equalsIgnoreCase(request.getParameter("isactive"));
 
-            bankAccountService.updateAccountActive(id, status);
+            bankAccountService.updateAccountActive(baid, status);
             LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMIN_SHOW_USER_ACCOUNTS);
             return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_USER_ACCOUNTS +
-                    "&id=" + id + "&isactive=" + status);
+                    "&id=" + id);
         } catch (ServiceException ex) {
             LOG.error("Error loading account by id");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));

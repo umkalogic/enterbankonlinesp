@@ -62,7 +62,8 @@
                 <form action="controller" method="post" class="btn">
                     <input type="hidden" name="id" value="${requestScope.payment.paymentId}">
                     <c:set var="msg"><fmt:message key="message.confirm.delete"/></c:set>
-                    <button type="submit" name="command" value="deletepayment" onclick="return confirm(this.getAttribute(${msg}))" class="btn btn-danger">
+                    <button type="submit" name="command" value="deletepayment" onclick="return confirm('${msg}')"
+                            class="btn btn-danger">
                         <fmt:message key="payment.delete.payment"/></button>
                 </form>
                 </c:if>
@@ -70,6 +71,8 @@
                 <br>
                 <c:if test="${requestScope.errorMessage != null}">
                     <h2 class="text-danger"><fmt:message key="error.message"/></h2>
+                </c:if>
+                <c:if test="${requestScope.infoMessage != null}">
                     <p class="text-info">${requestScope.infoMessage}</p>
                 </c:if>
 
@@ -80,6 +83,7 @@
         <hr>
         <a href = "${pageContext.servletContext.contextPath}/controller?command=userhome"><fmt:message key="label.backtouserlist" /></a>
     </div>
+    <br><br><br><br>
 </div>
 <script src="../../../static/js/jquery-3.2.1.slim.min.js"></script>
 <script src="../../../static/js/popper.min.js"></script>

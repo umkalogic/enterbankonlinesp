@@ -10,6 +10,8 @@ import ua.svitl.enterbank.servletproject.utils.exception.AppException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ChangeLangCommand implements Command {
@@ -54,6 +56,13 @@ public class ChangeLangCommand implements Command {
             case "showformforuserupdate":
                 return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE +
                         "&id=" + req.getParameter("id"));
+            case "payments":
+                return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS);
+            case "showformforpayment":
+                return CommandResult.redirect(ControllerConstants.COMMAND_USER_SHOW_FORM_FOR_PAYMENT +
+                        "&id=" + req.getParameter("id") +
+                        "&bankaccountfrom=" + req.getParameter("bankaccountfrom") +
+                        "&currency=" + req.getParameter("currency"));
             default:
                 LOG.error("Command changelang: unknown page: {}", page);
                 req.setAttribute("errorMessage", rb.getString("label.no.such.command"));

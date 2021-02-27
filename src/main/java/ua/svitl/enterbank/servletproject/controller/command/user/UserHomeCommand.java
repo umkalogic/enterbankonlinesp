@@ -33,10 +33,16 @@ public class UserHomeCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
+            request.setAttribute("errorMessage", "Session has ended.  Please login.");
+            request.setAttribute("infoMessage", "You must login to enter this page");
+            throw new AppException("You must login to enter this page");
+        }
+
         try {
             LOG.debug("Start execute command");
 
-            User user = (User) session.getAttribute("user");
             LOG.trace("Logged user: {}", user);
 
             String sortField = request.getParameter("sortfield") == null ? "bank_account_number" :

@@ -29,7 +29,7 @@ public class LogoutCommand implements Command {
         response.setHeader("Cache-control", "no-cache");
         response.setHeader("Cache-control", "no-store");
         response.setHeader("Pragma", "no-cache");
-        LOG.debug("Command ends. Go to {}", ControllerConstants.PAGE_INDEX);
+        LOG.debug("Command ends. Go to ==> {}", ControllerConstants.PAGE_INDEX);
         return CommandResult.redirect(ControllerConstants.PAGE_INDEX);
     }
 

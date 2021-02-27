@@ -62,7 +62,7 @@
 		</div>
 		<hr>
 		<a href = "${pageContext.servletContext.contextPath}?command=adminhome"><fmt:message key="label.backtouserlist"/></a>
-		<br><br>
+		<br><br>	<br><br>
 	</div>
 	<script src="../../../static/js/jquery-3.2.1.slim.min.js"></script>
 	<script src="../../../static/js/popper.min.js"></script>

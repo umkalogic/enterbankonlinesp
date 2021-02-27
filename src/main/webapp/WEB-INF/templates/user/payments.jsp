@@ -24,7 +24,7 @@
 <body>
 <div class="container-fluid">
     <jsp:include page="../fragments/nav-language.jsp">
-        <jsp:param name="page" value="userhome"/>
+        <jsp:param name="page" value="payments"/>
     </jsp:include>
 
     <jsp:include page="../fragments/nav-logout.jsp"/>
@@ -83,7 +83,7 @@
             <tbody>
             <c:forEach var="payment" items="${requestScope.payments}" varStatus = "status">
             <tr ${((requestScope.payments.size() > requestScope.pageSize) and requestScope.sortDir.equalsIgnoreCase("asc") and status.last)
-                    or ((requestScope.payments.size() > requestScope.pageSize) and requestScope.sortDir.equalsIgnoreCase("desc") and status.first)
+                    or ((requestScope.payments.size() > requestScope.pageSize) and requestScope.sortDir.equalsIgnoreCase("desc") and status.last)
                     ? 'style = "display:none"' : ''}>
                 <td>${payment.paymentId}</td>
                 <td>${payment.bankAccount.bankAccountNumber}</td>
@@ -98,13 +98,13 @@
                     <c:if test="${!payment.sent}">
                         <c:set var="msg"><fmt:message key="message.confirm.payment"/></c:set>
                     <a href="${pageContext.servletContext.contextPath}/controller?command=confirmpayment&paymentid=${payment.paymentId}&id=${payment.bankAccountId}&paymentamount=${payment.paymentAmount}&currency=${payment.bankAccount.currency}&bankaccountfrom=${payment.bankAccount.bankAccountNumber}&tobankaccount=${payment.toBankAccount}"
-                       onclick="return confirm(this.getAttribute(${msg}))"
+                       onclick="return confirm('${msg}')"
                        class="btn btn-info"><fmt:message key="payment.sent.payment"/></a>
                     </c:if>
                     <c:if test="${!payment.sent}">
-                        <c:set var="msg"><fmt:message key="message.confirm.delete"/></c:set>
+                        <c:set var="msg2"><fmt:message key="message.confirm.delete"/></c:set>
                     <a href="${pageContext.servletContext.contextPath}/controller?command=deletepayment&paymentid=${payment.paymentId}"
-                       onclick="return confirm(this.getAttribute(${msg}))"
+                       onclick="return confirm('${msg2}')"
                        class="btn btn-danger"><fmt:message key="payment.delete.payment"/></a>
                     </c:if>
                 </td>

@@ -188,6 +188,7 @@ public class JdbcPaymentDao implements PaymentDao {
 
             LOG.trace("Mapping payments...");
             while (rs.next()) {
+                LOG.trace("TIMESTAMP: {} ", rs.getTimestamp("payment_date"));
                 PaymentMapper paymentMapper = new PaymentMapper();
                 Payment payment = paymentMapper.map(rs);
                 payments.add(payment);

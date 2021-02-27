@@ -73,15 +73,16 @@
       <version>3.4.5</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
+      <artifactId>log4j-core</artifactId>
       <version>2.14.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
+      <artifactId>log4j-api</artifactId>
       <version>2.14.0</version>
     </dependency>
 
@@ -103,6 +104,7 @@
       <artifactId>jbcrypt</artifactId>
       <version>0.4</version>
     </dependency>
+
 
 <!--    &lt;!&ndash; https://mvnrepository.com/artifact/commons-validator/commons-validator &ndash;&gt;-->
 <!--    <dependency>-->

@@ -65,9 +65,10 @@
             </tr>
             </thead>
             <tbody>
+            <c:if test="${requestScope.listUserPersonData.size() > 0}">
             <c:forEach var="userdata" items="${requestScope.listUserPersonData}" varStatus = "status">
             <tr ${((requestScope.listUserPersonData.size() > requestScope.pageSize) and requestScope.sortDir.equalsIgnoreCase("asc") and status.last)
-            or ((requestScope.listUserPersonData.size() > requestScope.pageSize) and requestScope.sortDir.equalsIgnoreCase("desc") and status.first)
+            or ((requestScope.listUserPersonData.size() > requestScope.pageSize) and requestScope.sortDir.equalsIgnoreCase("desc") and status.last)
             ? 'style = "display:none"' : ''}>
                 <td>${userdata.userId}</td>
                 <td>${userdata.userName}</td>
@@ -95,7 +96,7 @@
                         <input type="hidden" name="isactive" value="false" />
                         <c:set var="msg"><fmt:message key="message.delete"/></c:set>
                         <button class="btn btn-danger" type="Submit" name="command" value="changeuserstatus"
-                                onclick="return confirm(${msg})">
+                                onclick="return confirm('${msg}')">
                             <fmt:message key="user.deactivate" /></button>
                     </form>
                     </c:if>
@@ -103,15 +104,16 @@
                         <form class="btn" action="controller" method="post">
                             <input type="hidden" name="id" value="${userdata.userId}" />
                             <input type="hidden" name="isactive" value="true" />
-                            <c:set var="msg"><fmt:message key="message.enable"/></c:set>
+                            <c:set var="msg1"><fmt:message key="message.enable"/></c:set>
                             <button class="btn btn-secondary" type="Submit" name="command" value="changeuserstatus"
-                                    onclick="return confirm(${msg})">
+                                    onclick="return confirm('${msg1}')">
                                 <fmt:message key="user.activate" /></button>
                         </form>
                     </c:if>
                 </td>
             </tr>
             </c:forEach>
+            </c:if>
             </tbody>
         </table>
         <br>

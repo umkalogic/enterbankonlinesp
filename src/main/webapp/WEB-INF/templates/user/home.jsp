@@ -110,7 +110,7 @@
                             <input type="hidden" name="id" value="${account.bankAccountId}" />
                             <c:set var="msg"><fmt:message key="message.disable.bank.account"/></c:set>
                             <button class="btn btn-danger" type="Submit"
-                                    onclick="return confirm(${msg})">
+                                    onclick="return confirm('${msg}')">
                                 <fmt:message key="account.disable" /></button>
                         </form>
                     </c:if>

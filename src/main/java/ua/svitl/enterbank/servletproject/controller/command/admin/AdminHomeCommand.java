@@ -6,6 +6,8 @@ import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerCons
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
+import ua.svitl.enterbank.servletproject.model.entity.User;
+import ua.svitl.enterbank.servletproject.utils.exception.AppException;
 import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.dto.UserPersonDataDto;
 import ua.svitl.enterbank.servletproject.model.service.UserService;
@@ -30,8 +32,15 @@ public class AdminHomeCommand implements Command {
      * @return Address to go once the command is executed.
      */
     @Override
-    public CommandResult execute(HttpServletRequest request, HttpServletResponse response) {
+    public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
+            request.setAttribute("errorMessage", "Session has ended.  Please login.");
+            request.setAttribute("infoMessage", "You must login to enter this page");
+            throw new AppException("You must login to enter this page");
+        }
+
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         try {
             int pageSize = ControllerConstants.PAGE_SIZE;

@@ -5,6 +5,7 @@ public final class ControllerConstants {
     public static final String PAGE_LOGIN = "/WEB-INF/templates/login.jsp";
     public static final String PAGE_ERROR = "/WEB-INF/templates/error.jsp";
     public static final String PAGE_INDEX = "index.jsp";
+    public static final String ERROR400 = "/WEB-INF/templates/error400.html";
 
     // admin pages
     public static final String PAGE_ADMIN_HOME = "/WEB-INF/templates/admin/home.jsp";
@@ -28,7 +29,7 @@ public final class ControllerConstants {
     public static final String COMMAND_ADMIN_SHOW_USER_ACCOUNTS = "controller?command=showuseraccounts";
     public static final String COMMAND_USER_PAYMENTS = "controller?command=payments";
     public static final String COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE = "controller?command=showformforuserupdate";
-
+    public static final String COMMAND_USER_SHOW_FORM_FOR_PAYMENT = "controller?command=showformforpayment";
 
     // attributes
     public static final String ATTR_PAYMENT = "payment";

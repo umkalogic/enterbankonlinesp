@@ -50,7 +50,6 @@ public class SubmitFormForUserUpdateCommand implements Command {
                 active = true;
             }
 
-           // boolean active = "true".equalsIgnoreCase(request.getParameter("isactive"));
             User user = new User();
             user.setUserId(id);
             user.setUserName(userName);
@@ -69,7 +68,6 @@ public class SubmitFormForUserUpdateCommand implements Command {
         }
 
         LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
-        //todo add infoMessage at admin home page
         return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME);
     }
 }

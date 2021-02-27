@@ -25,7 +25,10 @@
 <body>
 <div class="container-fluid">
     <jsp:include page="../fragments/nav-language.jsp">
-        <jsp:param name="page" value="makepayment"/>
+        <jsp:param name="page" value="showformforpayment"/>
+        <jsp:param name="bankaccountfrom" value="${requestScope.bankaccountfrom}"/>
+        <jsp:param name="id" value="${requestScope.id}"/>
+        <jsp:param name="currency" value="${requestScope.currency}"/>
     </jsp:include>
 
     <jsp:include page="../fragments/nav-logout.jsp"/>

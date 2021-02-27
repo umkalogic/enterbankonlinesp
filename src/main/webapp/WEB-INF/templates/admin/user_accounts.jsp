@@ -74,22 +74,40 @@
                     <td><fmt:message key="${account.active ? 'account.enabled' : 'account.disabled'}"/></td>
                     <td>
                         <c:if test="${account.active and !account.enableRequest}">
-                            <c:set var="msg" ><fmt:message key="message.disable.bank.account" /></c:set>
-                        <a href="${pageContext.servletContext.contextPath}?command=changeaccountstatus&isactive=false&id=${account.bankAccountId}"
-                           onclick="return confirm(this.getAttribute(${msg}))"
-                           class="btn btn-danger"><fmt:message key="account.disable"/></a>
+                            <form class="btn" action="controller" method="post">
+                            <c:set var="msg"><fmt:message key="message.disable.bank.account" /></c:set>
+                                <input type="hidden" name="isactive" value="false">
+                                <input type="hidden" name="id" value="${requestScope.id}">
+                                <input type="hidden" name="baid" value="${account.bankAccountId}">
+                            <button type="Submit" name="command" value="changeaccountstatus"
+                               onclick="return confirm('${msg}')"
+                               class="btn btn-danger"><fmt:message key="account.disable"/>
+                            </button>
+                            </form>
                         </c:if>
                         <c:if test="${!account.active and !account.enableRequest}">
-                            <c:set var="msg2" ><fmt:message key="message.enable.bank.account" /></c:set>
-                            <a href="${pageContext.servletContext.contextPath}?command=changeaccountstatus&isactive=true&id=${account.bankAccountId}"
-                           onclick="return confirm(this.getAttribute(${msg2}))"
-                           class="btn btn-secondary"><fmt:message key="account.enable"/></a>
+                        <form class="btn" action="controller" method="post">
+                            <c:set var="msg2"><fmt:message key="message.enable.bank.account" /></c:set>
+                                <input type="hidden" name="isactive" value="true">
+                                <input type="hidden" name="id" value="${requestScope.id}">
+                                <input type="hidden" name="baid" value="${account.bankAccountId}">
+                            <button type="Submit" name="command" value="changeaccountstatus"
+                               onclick="return confirm('${msg2}')"
+                               class="btn btn-secondary"><fmt:message key="account.enable"/>
+                            </button>
+                        </form>
                         </c:if>
                         <c:if test="${account.enableRequest}">
-                            <c:set var="msg3" ><fmt:message key="message.enable.bank.account" /></c:set>
-                            <a href="${pageContext.servletContext.contextPath}?command=changeaccountstatus&isactive=true&id=${account.bankAccountId}"
-                           class="btn btn-info"
-                           onclick="return confirm(this.getAttribute(${msg3}))"><fmt:message key="account.request.sent"/></a>
+                        <form class="btn" action="controller" method="post">
+                        <c:set var="msg3" ><fmt:message key="message.enable.bank.account" /></c:set>
+                            <input type="hidden" name="isactive" value="true">
+                            <input type="hidden" name="id" value="${requestScope.id}">
+                            <input type="hidden" name="baid" value="${account.bankAccountId}">
+                            <button type="submit" name="command" value="changeaccountstatus"
+                                class="btn btn-info" onclick="return confirm('${msg3}')">
+                                <fmt:message key="account.request.sent"/>
+                            </button>
+                        </form>
                         </c:if>
 
 
@@ -106,6 +124,7 @@
         <a href = "${pageContext.servletContext.contextPath}/controller?command=adminhome"><fmt:message key="label.backtouserlist"/></a>
         <br>
         <br>
+        <br><br>
     </div>
 </div>
 

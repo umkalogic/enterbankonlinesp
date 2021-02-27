@@ -43,10 +43,10 @@ public class PaymentsCommand implements Command {
             LOG.trace("Logged user: {}", user);
             String sortField = request.getParameter("sortfield") == null ? "payment_date" :
                     request.getParameter("sortfield");
-            String sortDir = request.getParameter("sortdir") == null ? "asc" : request.getParameter("sortdir");
+            String sortDir = request.getParameter("sortdir") == null ? "desc" : request.getParameter("sortdir");
 
             int pageNo = getIntOrOne(request, "currentpage");
-            int pageSize = ControllerConstants.PAGE_SIZE;
+            int pageSize = ControllerConstants.PAGE_SIZE + ControllerConstants.PAGE_SIZE;
             List<Payment> payments =
                     paymentService.findAllPaymentsByUser(user, pageNo, pageSize + 1, sortField, sortDir);
             payments.forEach(e -> LOG.debug(e.toString()));

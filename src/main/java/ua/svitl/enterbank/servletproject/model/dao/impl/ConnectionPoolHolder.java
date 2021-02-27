@@ -15,8 +15,8 @@ public class ConnectionPoolHolder {
 
     static {
         config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/mytestbankdb?serverTimezone=UTC&useSSL=true" +
-                "&useUnicode=yes&characterEncoding=UTF-8");
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/mytestbankdb?serverTimezone=UTC&useLegacyDatetimeCode=false" +
+                "&useSSL=true&useUnicode=yes&characterEncoding=UTF-8");
         config.setUsername("sveta");
         config.setPassword("sveta");
         config.setAutoCommit(true);
