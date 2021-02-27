@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.utils.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ResourceBundle;
 
 public class ParametersUtils {
     private static final Logger LOG = LogManager.getLogger(ParametersUtils.class);

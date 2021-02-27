@@ -38,7 +38,9 @@ public class DisableAccountCommand implements Command {
         try {
             LOG.debug("Start disable bank account command: account id={}", request.getParameter("id"));
 
-            int id = ParametersUtils.getId(request, "id");
+            ParametersUtils.checkIfNull(request, "id", "cannot.be.null");
+
+            int id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
 
             bankAccountService.updateAccountActive(user, id, false);
 
@@ -46,12 +48,14 @@ public class DisableAccountCommand implements Command {
             LOG.error("Error loading account by id");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         }
 
         LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
+        //todo add params infomessage/errormessage
         return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
     }
 }

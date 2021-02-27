@@ -71,7 +71,7 @@ public class ConfirmPaymentCommand implements Command {
             LOG.error("Couldn't confirm payment ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.confirm.payment"));
             request.setAttribute("infoMessage", ex.getMessage());
-            
+
         } catch (CommandException ex) {
             LOG.error("Error in payment data ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.data"));

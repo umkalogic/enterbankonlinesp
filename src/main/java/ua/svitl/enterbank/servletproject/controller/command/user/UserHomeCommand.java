@@ -58,12 +58,23 @@ public class UserHomeCommand implements Command {
             request.setAttribute("sortDir", sortDir);
             request.setAttribute("reverseSortDir", "asc".equalsIgnoreCase(sortDir) ? "desc" : "asc");
 
+            if (request.getParameter("infomessage") != null) {
+                request.setAttribute("infoMessage", request.getParameter("infomessage"));
+            }
+
+            if (request.getParameter("errormessage") != null) {
+                request.setAttribute("errorMessage", request.getParameter("errormessage"));
+            }
+
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_HOME);
             LOG.debug("End execute command");
             return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
+
         } catch (ServiceException ex) {
             LOG.error("UserHome: error loading user home page");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
+            //todo make redirect with info/error/message params
             return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
         }
     }

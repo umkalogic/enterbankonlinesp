@@ -2,15 +2,19 @@ package ua.svitl.enterbank.servletproject.controller.command.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
+import ua.svitl.enterbank.servletproject.utils.exception.CommandException;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ResourceBundle;
 
 
 /**
@@ -33,8 +37,17 @@ public class ShowFormForPaymentCommand implements Command {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
 
         LOG.trace("Logged user: {}", user);
+
+        try {
+            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
+        } catch (CommandException ex) {
+            //todo add infomessage/errormessage
+            //todo forward page_user_make_payment or redirect to previous page
+        }
+
         LOG.trace("Making payment from account id: {}; account number: {}",
                 request.getParameter("id"), request.getParameter("bankaccountfrom"));
 

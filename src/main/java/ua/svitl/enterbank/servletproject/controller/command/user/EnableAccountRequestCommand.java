@@ -38,7 +38,8 @@ public class EnableAccountRequestCommand implements Command {
         try {
             LOG.debug("Start enable account request command: account id={}", request.getParameter("id"));
 
-            int id = ParametersUtils.getId(request, "id");
+            ParametersUtils.checkIfNull(request, "id", "cannot.be.null");
+            int id = ParametersUtils.getId(request, "id", "wrong.id");
 
             bankAccountService.updateAccountEnableRequest(user, id);
 
@@ -46,12 +47,14 @@ public class EnableAccountRequestCommand implements Command {
             LOG.error("Error loading account by id");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         }
 
         LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
+        //todo add params error/info/message
         return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
     }
 }
