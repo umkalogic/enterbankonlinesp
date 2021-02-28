@@ -68,11 +68,15 @@ public class PaymentsCommand implements Command {
                 request.setAttribute("errorMessage", request.getParameter("errormessage"));
             }
 
+            if (request.getParameter("successmessage") != null) {
+                request.setAttribute("successMessage", request.getParameter("successmessage"));
+            }
+
             LOG.debug("End execute command=payments. Forwarding to... {}", ControllerConstants.PAGE_USER_PAYMENTS);
 
         } catch (ServiceException ex) {
             LOG.error("Command=payments: error loading user payments");
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", "label.error.loading.data");
             request.setAttribute("infoMessage", ex.getMessage());
         }
 

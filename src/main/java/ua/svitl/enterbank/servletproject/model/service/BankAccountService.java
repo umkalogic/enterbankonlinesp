@@ -8,6 +8,7 @@ import ua.svitl.enterbank.servletproject.model.dao.mapper.BankAccountDtoToBankAc
 import ua.svitl.enterbank.servletproject.model.dto.BankAccountDto;
 import ua.svitl.enterbank.servletproject.model.entity.BankAccount;
 import ua.svitl.enterbank.servletproject.model.entity.User;
+import ua.svitl.enterbank.servletproject.utils.exception.DaoException;
 import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
 
 import java.io.Serializable;
@@ -25,9 +26,12 @@ public class BankAccountService implements Serializable {
         try (BankAccountDao dao = daoFactory.createBankAccountDao()) {
             LOG.debug("Start get account: sortField={}, sortDir={}", sortField, sortDir);
             return dao.getUserAccounts(user, sortField, sortDir);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't get BankAccount from BankAccountService#getUserAccounts(): {}", ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't get BankAccount from BankAccountService#getUserAccounts(): {}", ex.getMessage());
-            throw new ServiceException("Couldn't get user accounts");
+            throw new ServiceException("not.get.user.accounts");
         }
 
     }
@@ -36,9 +40,12 @@ public class BankAccountService implements Serializable {
         try (BankAccountDao dao = daoFactory.createBankAccountDao()) {
             LOG.debug("Start get account data paginated: sortField={}, sortDir={}", sortField, sortDir);
             return dao.getUserAccountsById(id, sortField, sortDir);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't get BankAccount from BankAccountService#getUserAccountsById(): {}", ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't get BankAccount from BankAccountService#getUserAccountsById(): {}", ex.getMessage());
-            throw new ServiceException("Couldn't get user accounts");
+            throw new ServiceException("not.get.user.accounts");
         }
     }
 
@@ -50,20 +57,25 @@ public class BankAccountService implements Serializable {
         try (BankAccountDao dao = daoFactory.createBankAccountDao()) {
             LOG.debug("Start change bank account status ==> id={}", id);
             return dao.updateAccountIsActive(id, status);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't update bank account with id = {}", id);
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't update bank account with id = {}", id);
-            throw new ServiceException("Couldn't update bank account with id = " + id);
+            throw new ServiceException("not.update.account.status.db");
         }
     }
 
     public boolean updateAccountActive(User user, int id, boolean status) throws ServiceException {
-        //todo make another sql query for user/admin - check if person_id has ba_id to activate/deactivate
         try (BankAccountDao dao = daoFactory.createBankAccountDao()) {
             LOG.debug("Start change bank account status ==> id={}", id);
             return dao.updateAccountIsActive(user, id, status);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't update bank account with id = {}", id);
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't update bank account with id = {}", id);
-            throw new ServiceException("Couldn't update bank account with id = " + id);
+            throw new ServiceException("not.update.account.status.db");
         }
     }
 
@@ -71,9 +83,12 @@ public class BankAccountService implements Serializable {
         try (BankAccountDao dao = daoFactory.createBankAccountDao()) {
             LOG.debug("Start enable request ==> id={}", id);
             return dao.updateAccountEnableRequest(user, id);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't perform bank account (id = {}) enable request ", id);
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't perform bank account (id = {}) enable request ", id);
-            throw new ServiceException("Couldn't sent request to activate bank account with id = " + id);
+            throw new ServiceException("not.update.account.status.db");
         }
     }
 }

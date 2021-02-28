@@ -30,17 +30,15 @@ public class ChangeAccountStatusCommand implements Command {
      */
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
-        HttpSession session = request.getSession();
-        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
 
         try {
             LOG.debug("Start account change status command: user id={}, ba_id={}",
                     request.getParameter("id"), request.getParameter("baid"));
-            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
-            ParametersUtils.checkIfNull(request, "baid", rb.getString("cannot.be.null"));
+            ParametersUtils.checkIfNull(request, "id", "cannot.be.null");
+            ParametersUtils.checkIfNull(request, "baid", "cannot.be.null");
 
-            int id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
-            int baid = ParametersUtils.getId(request, "baid",  rb.getString("wrong.id"));
+            int id = ParametersUtils.getId(request, "id", "wrong.id");
+            int baid = ParametersUtils.getId(request, "baid",  "wrong.id");
             boolean status = "true".equalsIgnoreCase(request.getParameter("isactive"));
 
             bankAccountService.updateAccountActive(baid, status);
@@ -50,10 +48,10 @@ public class ChangeAccountStatusCommand implements Command {
                     "&id=" + id);
         } catch (ServiceException ex) {
             LOG.error("Error loading user by id ==> {}", ex.getMessage());
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", "label.error.loading.data");
             request.setAttribute("infoMessage", ex.getMessage());
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("errorMessage", "label.error.data");
             request.setAttribute("infoMessage", ex.getMessage());
 
         }

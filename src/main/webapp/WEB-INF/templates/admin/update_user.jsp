@@ -40,12 +40,12 @@
 			<input type="text" name="username" value="${requestScope.theuser.userName}" class="form-control mb-4 col-4"
 				   placeholder="<fmt:message key="label.username"/>" required>
 			<c:if test="${(requestScope.invalidUsername != null) && (!('null'.equalsIgnoreCase(requestScope.invalidUsername)))}">
-				<label class="validation-message">${requestScope.invalidUsername}</label><br>
+				<label class="validation-message"><fmt:message key="${requestScope.invalidUsername}"/></label><br>
 			</c:if>
 			<input type="text" name="email" value="${requestScope.theuser.email}"
 				   placeholder="<fmt:message key="label.email"/>" class="form-control mb-4 col-4" required>
 			<c:if test="${(requestScope.invalidEmail != null) && !('null'.equalsIgnoreCase(requestScope.invalidEmail))}">
-				<label class="validation-message">${requestScope.invalidEmail}</label>
+				<label class="validation-message"><fmt:message key="${requestScope.invalidEmail}"/></label>
 			</c:if>
 			<br>
 			<div class="form-control mb-4 col-4">
@@ -57,10 +57,10 @@
 			<button type="submit" name="command" value="submitformforuserupdate" class="btn btn-info col-2"><fmt:message key="user.update"/></button>
 			<br>
 			<br>
-			<c:if test="${requestScope.errorMessage}">
+			<c:if test="${requestScope.errorMessage != null}">
 			   <h2 class="text-danger"><fmt:message key="${requestScope.errorMessage}"/></h2>
 			</c:if>
-			<c:if test="${requestScope.infoMessage}">
+			<c:if test="${requestScope.infoMessage != null}">
 				<p class="text-danger"><fmt:message key="${requestScope.infoMessage}"/></p>
 			</c:if>
 		</form>

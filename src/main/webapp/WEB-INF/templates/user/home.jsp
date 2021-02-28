@@ -35,17 +35,19 @@
     </div>
     <c:if test="${requestScope.errorMessage != null}">
         <div class="container-fluid">
-            <h3 style="color:darkred"><c:out value="${requestScope.errorMessage}"/></h3>
+            <h3 style="color:darkred"><c:if test="${requestScope.errorMessage != null}">
+                <fmt:message key="${requestScope.errorMessage}"/>
+            </c:if></h3>
             <c:remove var="errorMessage" scope="request" />
         </div>
-        <br>
     </c:if>
     <c:if test="${requestScope.infoMessage != null}">
         <div class="container-fluid">
-            <p><c:out value="${requestScope.infoMessage}"/></p>
+            <p><c:if test="${requestScope.infoMessage != null}">
+                <fmt:message key="${requestScope.infoMessage}"/>
+            </c:if></p>
             <c:remove var="infoMessage" scope="request" />
         </div>
-        <br>
     </c:if>
     <div class="container-fluid">
         <ul class="nav nav-pills">

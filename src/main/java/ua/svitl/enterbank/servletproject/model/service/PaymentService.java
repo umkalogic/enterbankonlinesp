@@ -6,6 +6,7 @@ import ua.svitl.enterbank.servletproject.model.dao.AbstractDaoFactory;
 import ua.svitl.enterbank.servletproject.model.dao.PaymentDao;
 import ua.svitl.enterbank.servletproject.model.entity.Payment;
 import ua.svitl.enterbank.servletproject.model.entity.User;
+import ua.svitl.enterbank.servletproject.utils.exception.DaoException;
 import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
 
 import java.io.Serializable;
@@ -26,9 +27,12 @@ public class PaymentService implements Serializable {
         try (PaymentDao dao = daoFactory.createPaymentDao()) {
             LOG.debug("Start create new payment in DB for user: {}, payment={}", user, payment);
             return dao.createPayment(user, payment, bankAccountNumber);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't create new payment in DB ==> {}", ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't create new payment in DB ==> {}", ex.getMessage());
-            throw new ServiceException("Couldn't create payment in DB");
+            throw new ServiceException("not.create.payment.db");
         }
     }
 
@@ -36,9 +40,12 @@ public class PaymentService implements Serializable {
         LOG.debug("Start update payment ==> [ {} ] ==> for user ==> [ {} ]", payment, user);
         try (PaymentDao dao = daoFactory.createPaymentDao()) {
             return dao.updatePayment(user, payment);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't update payment in DB ==> {}", ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't update payment in DB ==> {}", ex.getMessage());
-            throw new ServiceException("Couldn't update payment in DB");
+            throw new ServiceException("not.create.payment.db");
         }
 
     }
@@ -50,9 +57,12 @@ public class PaymentService implements Serializable {
             LOG.debug("Start get payments paginated: offset={}, records={}, sortField={}, sortDir={}",
                     (pageNo - 1) * (pageSize - 1), pageSize, sortField, sortDir);
             return dao.findAllByUser(user, (pageNo - 1) * (pageSize - 1), pageSize, sortField, sortDir);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't find user [ {} ] payments", user);
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
             LOG.error("Couldn't find user [ {} ] payments", user);
-            throw new ServiceException("Couldn't find user payments in DB");
+            throw new ServiceException("not.found.user.payments.db");
         }
     }
 
@@ -61,9 +71,12 @@ public class PaymentService implements Serializable {
         try (PaymentDao dao = daoFactory.createPaymentDao()) {
             LOG.debug("Start delete payment, id={}", id);
             return dao.deletePaymentByIdForUser(user, id);
+        } catch (DaoException ex) {
+            LOG.error("Couldn't delete user [ {} ] payment={}", user, id);
+            throw new ServiceException(ex.getMessage());
         } catch (Exception ex) {
-            LOG.error("Couldn't find user [ {} ] payments", user);
-            throw new ServiceException("Couldn't find user payments in DB");
+            LOG.error("Couldn't delete user [ {} ] payment={}", user, id);
+            throw new ServiceException("not.delete.payment");
         }
     }
 }

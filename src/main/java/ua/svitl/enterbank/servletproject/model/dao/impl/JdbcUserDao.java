@@ -49,7 +49,7 @@ public class JdbcUserDao implements UserDao {
             }
         } catch (SQLException ex) {
             LOG.error("Couldn't find user by username: {}", ex.getMessage());
-            throw new DaoException("Couldn't find user by username and password");
+            throw new DaoException("user.not.found");
         }
     }
 
@@ -70,7 +70,7 @@ public class JdbcUserDao implements UserDao {
             return Optional.ofNullable(user);
         } catch (SQLException ex) {
             LOG.error("Couldn't find user by user id: {}", ex.getMessage());
-            throw new DaoException("Couldn't find user");
+            throw new DaoException("user.not.found");
         }
     }
 
@@ -91,7 +91,7 @@ public class JdbcUserDao implements UserDao {
             return userList;
         } catch (SQLException ex) {
             LOG.error("Couldn't find users: {}", ex.getMessage());
-            throw new DaoException("Couldn't find users");
+            throw new DaoException("users.not.found");
         }
     }
 
@@ -114,7 +114,7 @@ public class JdbcUserDao implements UserDao {
             return true;
         } catch (SQLException e) {
             LOG.error("Couldn't create user in DB: {}", user);
-            throw new DaoException("Couldn't create user in DB");
+            throw new DaoException("user.not.created.db");
         }
     }
 
@@ -138,7 +138,7 @@ public class JdbcUserDao implements UserDao {
             return true;
         } catch (SQLException e) {
             LOG.error("Couldn't update user in DB: {}", user);
-            throw new DaoException("Couldn't update user in DB");
+            throw new DaoException("user.not.updated.db");
         }
     }
 
@@ -157,7 +157,7 @@ public class JdbcUserDao implements UserDao {
             return true;
         } catch (SQLException e) {
             LOG.error("Couldn't update user status in DB: id = {}", id);
-            throw new DaoException("Couldn't update user (id="+ id + ") status in DB.");
+            throw new DaoException("user.status.not.updated.in.db");
         }
     }
 
@@ -182,7 +182,7 @@ public class JdbcUserDao implements UserDao {
             return userPersonDataList;
         } catch (SQLException ex) {
             LOG.error("Couldn't find users with USER role in DB --> {}", ex.getMessage());
-            throw new DaoException("Couldn't find users with USER role in DB");
+            throw new DaoException("not.found.users.with.user.role.db");
         }
     }
 
@@ -210,7 +210,7 @@ public class JdbcUserDao implements UserDao {
             return Optional.ofNullable(userDto);
         } catch (SQLException ex) {
             LOG.error("Couldn't find user with id={} ==> {}", id, ex.getMessage());
-            throw new DaoException("Couldn't find user by id=" + id);
+            throw new DaoException("user.not.found");
         }
     }
 
@@ -227,7 +227,7 @@ public class JdbcUserDao implements UserDao {
             return true;
         } catch (SQLException e) {
             LOG.error("Couldn't delete user from DB: {}", user);
-            throw new DaoException("Couldn't delete user from DB");
+            throw new DaoException("user.not.deleted.db");
         }
     }
 
@@ -239,17 +239,9 @@ public class JdbcUserDao implements UserDao {
             connection.close();
         } catch (Exception ex) {
             LOG.error("{} --> {}", JdbcUserDao.class.getName(), ex.getMessage());
-            throw new DaoException("Could not close DB connection");
+            throw new DaoException("cannot.close.db.connection");
         }
     }
 
-    private void close(AutoCloseable res) {
-        if (res != null) {
-            try {
-                res.close();
-            } catch (Exception ex) {
-                LOG.error("{} --> {}", JdbcUserDao.class.getName(), ex.getMessage());
-            }
-        }
-    }
+
 }

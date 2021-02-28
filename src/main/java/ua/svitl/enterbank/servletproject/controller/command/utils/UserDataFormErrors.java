@@ -3,7 +3,6 @@ package ua.svitl.enterbank.servletproject.controller.command.utils;
 import ua.svitl.enterbank.servletproject.utils.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ResourceBundle;
 
 public class UserDataFormErrors {
     String userNameError;
@@ -35,23 +34,22 @@ public class UserDataFormErrors {
                 ", emailError='" + emailError + '\'' +
                 '}';
     }
-    public String getValidUsername(HttpServletRequest request, ResourceBundle rb) {
+    public String getValidUsername(HttpServletRequest request) {
         String userName = "";
         try {
-            userName = ParametersUtils.getString(request, "username",
-                    rb.getString("cannot.be.null"));
-            ParametersUtils.checkUserName(userName, rb.getString("wrong.username.pattern"));
+            userName = ParametersUtils.getString(request, "username", "cannot.be.null");
+            ParametersUtils.checkUserName(userName,"wrong.username.pattern");
         } catch (CommandException e) {
             userNameError = e.getMessage();
         }
         return userName;
     }
 
-    public String getValidEmail(HttpServletRequest request, ResourceBundle rb) {
+    public String getValidEmail(HttpServletRequest request) {
         String email = "";
         try {
-            email = ParametersUtils.getString(request, "email",  rb.getString("cannot.be.null"));
-            ParametersUtils.checkEmail(email, rb.getString("valid.email"));
+            email = ParametersUtils.getString(request, "email", "cannot.be.null");
+            ParametersUtils.checkEmail(email,"valid.email");
         } catch (CommandException e) {
             setEmailError(e.getMessage());
         }

@@ -33,13 +33,10 @@ public class ShowFormForUserUpdateCommand implements Command {
      */
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
-        HttpSession session = request.getSession();
-        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
-        Integer id = null;
         try {
-            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
+            ParametersUtils.checkIfNull(request, "id", "cannot.be.null");
 
-            id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
+            int id = ParametersUtils.getId(request, "id", "wrong.id");
             LOG.debug("Start show form for user update command: user id={}", request.getParameter("id"));
 
             Optional<UserDto> user = userService.getUserById(id);
@@ -72,11 +69,11 @@ public class ShowFormForUserUpdateCommand implements Command {
 
         } catch (ServiceException ex) {
             LOG.error("Error loading user by id ==> {}", ex.getMessage());
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", "label.error.loading.data");
             request.setAttribute("infoMessage", ex.getMessage());
 
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("errorMessage", "label.error.data");
             request.setAttribute("infoMessage", ex.getMessage());
         }
 

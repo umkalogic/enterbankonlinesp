@@ -6,7 +6,6 @@
 <%@taglib uri="http://example.com/functions" prefix="f" %>
 
 <%@ page isELIgnored="false" %>
-
 <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="messages" />
 <c:set var="prevpage" value="adminhome" />
@@ -33,13 +32,13 @@
     </div>
     <c:if test="${requestScope.errorMessage != null}">
         <div class="container-fluid">
-            <h3 style="color:darkred"><c:out value="${requestScope.errorMessage}"/></h3>
+            <h3 style="color:darkred"><fmt:message key="${requestScope.errorMessage}"/></h3>
             <c:remove var="errorMessage" scope="request" />
         </div>
     </c:if>
     <c:if test="${requestScope.infoMessage != null}">
         <div class="container-fluid">
-            <p><c:out value="${requestScope.infoMessage}"/></p>
+            <p><fmt:message key="${requestScope.infoMessage}"/></p>
             <c:remove var="infoMessage" scope="request" />
         </div>
     </c:if>

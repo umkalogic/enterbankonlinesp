@@ -37,7 +37,7 @@ public class EncodingFilter implements Filter {
             LOG.trace("Request encoding = null, set encoding: {}", encoding);
             request.setCharacterEncoding(encoding);
         }
-
+        response.setContentType("text/html; " + encoding);
         response.setCharacterEncoding(encoding);
 
         LOG.debug("Filter finished");

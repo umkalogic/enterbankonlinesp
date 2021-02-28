@@ -34,17 +34,15 @@ public class SubmitFormForUserUpdateCommand implements Command {
      */
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
-        HttpSession session = request.getSession();
-        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         UserDataFormErrors formValidationErrors = new UserDataFormErrors();
         Integer id = null;
         try {
-            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
-            id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
+            ParametersUtils.checkIfNull(request, "id", "cannot.be.null");
+            id = ParametersUtils.getId(request, "id", "wrong.id");
 
-            String userName = formValidationErrors.getValidUsername(request, rb);
+            String userName = formValidationErrors.getValidUsername(request);
 
-            String email = formValidationErrors.getValidEmail(request, rb);;
+            String email = formValidationErrors.getValidEmail(request);
 
             if (formValidationErrors.getUserNameError() != null
                     || formValidationErrors.getEmailError() != null) {
@@ -72,14 +70,14 @@ public class SubmitFormForUserUpdateCommand implements Command {
 
             userService.updateUser(user);
 
-            request.setAttribute("infoMessage", rb.getString("user.update.successfull"));
+            request.setAttribute("infoMessage", "user.update.successfull");
             LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
             return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
-                    "&infomessage=" + rb.getString("user.update.successfull"));
+                    "&infomessage=user.update.successfull");
 
         } catch (ServiceException ex) {
             LOG.error("Error loading user by id ==> {}", ex.getMessage());
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", "label.error.loading.data");
             request.setAttribute("infoMessage", ex.getMessage());
             return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE +
                     "&id=" + request.getParameter("id") +
@@ -88,7 +86,7 @@ public class SubmitFormForUserUpdateCommand implements Command {
 
         } catch (CommandException ex) {
             LOG.error("Validation error in user update form ==> {}", ex.getMessage());
-            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("errorMessage", "label.error.data");
             request.setAttribute("infoMessage", ex.getMessage());
             return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
                     "&errormessage=" + request.getAttribute("errorMessage") +

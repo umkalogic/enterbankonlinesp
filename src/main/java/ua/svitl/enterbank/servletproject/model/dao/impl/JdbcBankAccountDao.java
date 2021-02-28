@@ -34,7 +34,7 @@ public class JdbcBankAccountDao implements BankAccountDao {
             connection.close();
         } catch (Exception ex) {
             LOG.error("{} --> {}", JdbcBankAccountDao.class.getName(), ex.getMessage());
-            throw new DaoException("Could not close DB connection");
+            throw new DaoException("cannot.close.db.connection");
         }
     }
 
@@ -78,7 +78,7 @@ public class JdbcBankAccountDao implements BankAccountDao {
             return bankAccountDtoList;
         } catch (SQLException ex) {
             LOG.error("Couldn't find accounts for user --> {}", ex.getMessage());
-            throw new DaoException("Couldn't find accounts for the given user in DB");
+            throw new DaoException("not.found.user.accounts.db");
         }
     }
 
@@ -138,7 +138,7 @@ public class JdbcBankAccountDao implements BankAccountDao {
             return bankAccountDtoList;
         } catch (SQLException ex) {
             LOG.error("Couldn't find accounts for user --> {}", ex.getMessage());
-            throw new DaoException("Couldn't find accounts for the given user in DB");
+            throw new DaoException("not.find.accounts.db");
         }
     }
 
@@ -187,7 +187,7 @@ public class JdbcBankAccountDao implements BankAccountDao {
             return true;
         } catch (SQLException e) {
             LOG.error("Couldn't update bank account status in DB: id = {}", id);
-            throw new DaoException("Couldn't update bank account (id="+ id + ") status in DB.");
+            throw new DaoException("not.update.account.status.db");
         }
     }
 
@@ -208,8 +208,7 @@ public class JdbcBankAccountDao implements BankAccountDao {
             return true;
         } catch (SQLException e) {
             LOG.error("Couldn't update bank account status in DB: id = {}, user ==> [ {} ]", id, user);
-            throw new DaoException("Couldn't update bank account (id=" + id + ") status in DB for user (id=" +
-                    user.getUserId() + ")" );
+            throw new DaoException("not.update.account.status.db");
         }
     }
 
@@ -230,8 +229,7 @@ public class JdbcBankAccountDao implements BankAccountDao {
         } catch (SQLException e) {
             LOG.error("Couldn't update bank account enable request status in DB: id = {}, user ==> [ {} ]",
                     id, user);
-            throw new DaoException("Couldn't update bank account (id=" + id + ") enable request status in DB for user " +
-                    "(id=" + user.getUserId() + ")" );
+            throw new DaoException("not.update.account.status.db");
         }
     }
 

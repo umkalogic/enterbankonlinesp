@@ -69,7 +69,8 @@ public class ConfirmPaymentCommand implements Command {
             LOG.debug("Forwarding to... {}", ControllerConstants.COMMAND_USER_PAYMENTS);
 
             LOG.debug("End execute command");
-            return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS +
+                    "&successmessage=payment.confirmed");
 
         } catch (ServiceException ex) {
             LOG.error("Couldn't confirm payment ==> {}", ex.getMessage());
@@ -81,7 +82,7 @@ public class ConfirmPaymentCommand implements Command {
             request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
         }
-        //todo add params to to confirmpayment with params: id, paymentid, toba, bafrom
+
         return CommandResult.forward(ControllerConstants.PAGE_USER_SEND_PAYMENT);
     }
 

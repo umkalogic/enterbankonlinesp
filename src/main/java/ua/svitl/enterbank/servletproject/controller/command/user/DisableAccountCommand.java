@@ -53,11 +53,11 @@ public class DisableAccountCommand implements Command {
 
         } catch (ServiceException ex) {
             LOG.error("Error loading account by id");
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", "label.error.loading.data");
             request.setAttribute("infoMessage", ex.getMessage());
 
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("errorMessage", "label.error.data");
             request.setAttribute("infoMessage", ex.getMessage());
         }
 

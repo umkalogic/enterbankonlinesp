@@ -34,19 +34,20 @@ public class DeletePayment implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Start execute command");
         HttpSession session = request.getSession();
-        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
         if (null == user) {
+            ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
             LOG.error("Unauthorized request. Session has ended");
             throw new AppException(rb.getString("message.you.must.login"));
         }
         LOG.trace("Logged user: {}", user);
 
         try {
-            LOG.trace("Deleting payment [{}] for user ==> [ {} ]", request.getParameter("paymentid"), user);
+            LOG.trace("Deleting payment [{}] for user ==> [ {} ]",
+                    request.getParameter("paymentid"), user);
             ParametersUtils.checkIfNull(request, "paymentid", "cannot.be.null");
 
-            int id = ParametersUtils.getId(request, "paymentid", rb.getString("wrong.id"));
+            int id = ParametersUtils.getId(request, "paymentid", "wrong.id");
 
             paymentService.deletePaymentForUserById(user, id);
 
@@ -55,11 +56,11 @@ public class DeletePayment implements Command {
 
         } catch (ServiceException ex) {
             LOG.error("Exception in DB ==> ", ex);
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", "label.error.loading.data");
             request.setAttribute("infoMessage", ex.getMessage());
 
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("errorMessage", "label.error.data");
             request.setAttribute("infoMessage", ex.getMessage());
         }
 

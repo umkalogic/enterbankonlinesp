@@ -31,7 +31,7 @@ public class JdbcPaymentDao implements PaymentDao {
             connection.close();
         } catch (Exception ex) {
             LOG.error("{} --> {}", JdbcPaymentDao.class.getName(), ex.getMessage());
-            throw new DaoException("Could not close DB connection");
+            throw new DaoException("cannnot.close.db.connection");
         }
     }
 
@@ -69,7 +69,7 @@ public class JdbcPaymentDao implements PaymentDao {
             return true;
         } catch (SQLException e) {
             LOG.error("Couldn't update payment in DB: {}", payment);
-            throw new DaoException("Couldn't update payment in DB");
+            throw new DaoException("not.update.payment.db");
         }
     }
 
@@ -118,7 +118,7 @@ public class JdbcPaymentDao implements PaymentDao {
             return payment;
         } catch (SQLException ex) {
             LOG.error("Couldn't create payment --> {}", ex.getMessage());
-            throw new DaoException("Couldn't create payment in DB");
+            throw new DaoException("not.create.payment.db");
         }
     }
 
@@ -157,7 +157,7 @@ public class JdbcPaymentDao implements PaymentDao {
             return statement.execute();
         } catch (SQLException ex) {
             LOG.error("Couldn't confirm payment --> {}", ex.getMessage());
-            throw new DaoException("Couldn't perform payment transaction");
+            throw new DaoException("not.perform.payment.transaction.db");
         }
     }
 
@@ -198,7 +198,7 @@ public class JdbcPaymentDao implements PaymentDao {
             return payments;
         } catch (SQLException ex) {
             LOG.error("Couldn't find user payments --> {}", ex.getMessage());
-            throw new DaoException("Couldn't find user payments in DB");
+            throw new DaoException("not.found.user.payments.db");
         }
 
     }
@@ -216,7 +216,7 @@ public class JdbcPaymentDao implements PaymentDao {
             return true;
         } catch (SQLException ex) {
             LOG.error("Couldn't delete payment by id={} for user ==> [{}]", id, user);
-            throw new DaoException("Couldn't delete payment with id=" + id + " for given user in DB");
+            throw new DaoException("not.delete.payment");
         }
     }
 

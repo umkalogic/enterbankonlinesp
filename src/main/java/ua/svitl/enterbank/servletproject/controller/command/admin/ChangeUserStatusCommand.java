@@ -36,9 +36,9 @@ public class ChangeUserStatusCommand implements Command {
         try {
             LOG.debug("Start user change status command: user id={}", request.getParameter("id"));
 
-            ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
+            ParametersUtils.checkIfNull(request, "id", "cannot.be.null");
 
-            int id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
+            int id = ParametersUtils.getId(request, "id", "wrong.id");
 
             boolean status = "true".equalsIgnoreCase(request.getParameter("isactive"));
 
@@ -50,7 +50,7 @@ public class ChangeUserStatusCommand implements Command {
             request.setAttribute("infoMessage", ex.getMessage());
         } catch (CommandException ex) {
             LOG.error("Validation error ==> {}", ex.getMessage());
-            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("errorMessage", "label.error.data");
             request.setAttribute("infoMessage", ex.getMessage());
         }
 

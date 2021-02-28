@@ -48,7 +48,7 @@ public class ShowFormForPaymentCommand implements Command {
         try {
             ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
         } catch (CommandException ex) {
-            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("errorMessage", "label.error.data");
             request.setAttribute("infoMessage", ex.getMessage());
 
             LOG.debug("Redirecting to ==> {}", ControllerConstants.COMMAND_USERHOME);

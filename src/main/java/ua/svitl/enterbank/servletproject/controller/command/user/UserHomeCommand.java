@@ -32,9 +32,9 @@ public class UserHomeCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
-        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
         if (null == user) {
+            ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
             LOG.error("Unauthorized request. Session has ended");
             throw new AppException(rb.getString("message.you.must.login"));
         }
@@ -70,7 +70,7 @@ public class UserHomeCommand implements Command {
 
         } catch (ServiceException ex) {
             LOG.error("UserHome: error loading user home page");
-            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("errorMessage", "label.error.loading.data");
             request.setAttribute("infoMessage", ex.getMessage());
             LOG.debug("Redirecting to ==> {}", ControllerConstants.COMMAND_USERHOME);
             return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME +

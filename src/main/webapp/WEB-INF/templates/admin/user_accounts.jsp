@@ -36,6 +36,21 @@
         <hr>
     </div>
 
+    <c:if test="${requestScope.errorMessage != null}">
+        <div class="container-fluid">
+            <h3 style="color:darkred"><c:out value="${requestScope.errorMessage}"/></h3>
+            <c:remove var="errorMessage" scope="request" />
+        </div>
+        <br>
+    </c:if>
+    <c:if test="${requestScope.infoMessage != null}">
+        <div class="container-fluid">
+            <p><c:out value="${requestScope.infoMessage}"/></p>
+            <c:remove var="infoMessage" scope="request" />
+        </div>
+        <br>
+    </c:if>
+
     <div class="container-fliud">
         <table class = "table table-bordered table-striped table-responsive-md table-hover">
             <thead class="thead-dark">
