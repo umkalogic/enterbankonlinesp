@@ -40,7 +40,7 @@ public class DaoProperties {
     }
 
     /**
-     * Returns the DAOProperties instance specific property value associated with the given key.
+     * Returns the DaoProperties instance specific property value associated with the given key.
      * @param key The key to be associated with a DAOProperties instance specific value.
      * @return The DAOProperties instance specific property value associated with the given key.
      * @throws DaoException If the returned property value is null or empty
@@ -49,8 +49,8 @@ public class DaoProperties {
         String property = PROPERTIES.getProperty(key);
 
         if (property == null || property.trim().length() == 0) {
-            throw new DaoException("Required property '" + key + "'"
-                        + " is missing in properties file '" + PROPERTIES_FILE + "'.");
+            LOG.error("Required property '{}' is missing in properties file '{}'.", key, PROPERTIES_FILE);
+            throw new DaoException("no.property.found");
         }
 
         return property;
