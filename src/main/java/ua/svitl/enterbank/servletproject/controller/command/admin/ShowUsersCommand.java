@@ -51,19 +51,28 @@ public class ShowUsersCommand implements Command {
             userList.forEach(e -> LOG.debug(e.toString()));
 
             request.setAttribute("listUserPersonData", userList);
+
             ParametersUtils.setPaginationAttributes(request, sortField, sortDir, pageNo, pageSize, userList.size());
+
+            if (request.getParameter("errormessage") != null) {
+                request.setAttribute("errorMessage", request.getParameter("errormessage"));
+            }
+
+            if (request.getParameter("infomessage") != null) {
+                request.setAttribute("infoMessage", request.getParameter("infomessage"));
+            }
 
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_HOME);
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
 
         } catch (ServiceException ex) {
-            LOG.error("AdminHome: error loading users list");
+            LOG.error("AdminHome: error query in DB ==> {}", ex.getMessage());
 
-            HttpSession session = request.getSession();
-            ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+            ResourceBundle rb = ResourcesBundle.getResourceBundle(request.getSession());
 
-            LOG.debug("Get resource bundle locale ==> {}", rb.getLocale());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
+
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
         }
     }

@@ -32,6 +32,7 @@ public class ChangeAccountStatusCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+
         try {
             LOG.debug("Start account change status command: user id={}, ba_id={}",
                     request.getParameter("id"), request.getParameter("baid"));

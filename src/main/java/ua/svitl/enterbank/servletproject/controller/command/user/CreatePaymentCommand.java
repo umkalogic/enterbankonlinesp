@@ -12,10 +12,12 @@ import ua.svitl.enterbank.servletproject.model.service.PaymentService;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
 import ua.svitl.enterbank.servletproject.utils.exception.CommandException;
 import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ResourceBundle;
 
 public class CreatePaymentCommand implements Command {
     private static final long serialVersionUID = 4420654600091410248L;
@@ -33,7 +35,12 @@ public class CreatePaymentCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         LOG.debug("Start execute command");
         HttpSession session = request.getSession();
+        ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
+        if (null == user) {
+            LOG.error("Unauthorized request. Session has ended");
+            throw new AppException(rb.getString("message.you.must.login"));
+        }
         LOG.trace("Logged user: {}", user);
         try {
             LOG.trace("Creating new payment: id={}", request.getParameter("id"));
@@ -62,16 +69,18 @@ public class CreatePaymentCommand implements Command {
 
         } catch (ServiceException ex) {
             LOG.error("Exception in DB ==> ", ex);
-            request.setAttribute("errorMessage", ex.getMessage());
-            //todo add infoMessage attribute
-            LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
+            request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
 
-            //todo add infomessage/errormessage parameters
-            return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
+            LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME +
+                    "&errormessage=" + request.getAttribute("errorMessage") +
+                    "&infomessage=" + request.getAttribute("infoMessage"));
+
         } catch (CommandException ex) {
             LOG.error("Exception in form data ==> {}", ex.getMessage());
-            request.setAttribute("errorMessage", ex.getMessage());
-            //todo add infoMessage attribute
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
 
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_USER_MAKE_PAYMENT);
 

@@ -36,6 +36,10 @@ public class DeletePayment implements Command {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
+        if (null == user) {
+            LOG.error("Unauthorized request. Session has ended");
+            throw new AppException(rb.getString("message.you.must.login"));
+        }
         LOG.trace("Logged user: {}", user);
 
         try {
@@ -46,6 +50,9 @@ public class DeletePayment implements Command {
 
             paymentService.deletePaymentForUserById(user, id);
 
+            LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USER_PAYMENTS);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS);
+
         } catch (ServiceException ex) {
             LOG.error("Exception in DB ==> ", ex);
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
@@ -54,11 +61,12 @@ public class DeletePayment implements Command {
         } catch (CommandException ex) {
             request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
-
         }
-        //todo add errormessage/infomessage params to redirect request
+
         LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USER_PAYMENTS);
-        return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS);
+        return CommandResult.redirect(ControllerConstants.COMMAND_USER_PAYMENTS +
+                "&errormessage=" + request.getAttribute("errorMessage") +
+                "&infomessage=" + request.getAttribute("infoMessage"));
 
     }
 }

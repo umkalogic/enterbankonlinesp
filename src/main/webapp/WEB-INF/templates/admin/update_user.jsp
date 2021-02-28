@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="../../../static/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../../../static/css/home.css"/>
 	<link rel="stylesheet" type="text/css" href="../../../static/css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="../../../static/css/registration.css"/>
 	<title><fmt:message key="title.update.user" /></title>
 </head>
 <body>
@@ -38,13 +39,15 @@
 			<input type="hidden" name="id" value="${requestScope.theuser.userId}">
 			<input type="text" name="username" value="${requestScope.theuser.userName}" class="form-control mb-4 col-4"
 				   placeholder="<fmt:message key="label.username"/>" required>
-<%--			<label th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"--%>
-<%--				   class="validation-message"></label>--%>
+			<c:if test="${(requestScope.invalidUsername != null) && (!('null'.equalsIgnoreCase(requestScope.invalidUsername)))}">
+				<label class="validation-message">${requestScope.invalidUsername}</label><br>
+			</c:if>
 			<input type="text" name="email" value="${requestScope.theuser.email}"
 				   placeholder="<fmt:message key="label.email"/>" class="form-control mb-4 col-4" required>
-<%--			<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"--%>
-<%--					class="validation-message"></label>--%>
-			<br/>
+			<c:if test="${(requestScope.invalidEmail != null) && !('null'.equalsIgnoreCase(requestScope.invalidEmail))}">
+				<label class="validation-message">${requestScope.invalidEmail}</label>
+			</c:if>
+			<br>
 			<div class="form-control mb-4 col-4">
 			  <label><fmt:message key="user.enabled"/>  ?</label>
 				<input type="checkbox" name="isactive" id="chk1"

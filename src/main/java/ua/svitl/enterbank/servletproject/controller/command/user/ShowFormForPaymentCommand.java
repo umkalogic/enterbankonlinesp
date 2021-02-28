@@ -38,14 +38,23 @@ public class ShowFormForPaymentCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+        if (null == user) {
+            LOG.error("Unauthorized request. Session has ended");
+            throw new AppException(rb.getString("message.you.must.login"));
+        }
 
         LOG.trace("Logged user: {}", user);
 
         try {
             ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
         } catch (CommandException ex) {
-            //todo add infomessage/errormessage
-            //todo forward page_user_make_payment or redirect to previous page
+            request.setAttribute("errorMessage", rb.getString("label.error.data"));
+            request.setAttribute("infoMessage", ex.getMessage());
+
+            LOG.debug("Redirecting to ==> {}", ControllerConstants.COMMAND_USERHOME);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME +
+                    "&errormessage=" + request.getAttribute("errorMessage") +
+                    "&infomessage=" + request.getAttribute("infoMessage"));
         }
 
         LOG.trace("Making payment from account id: {}; account number: {}",

@@ -40,6 +40,10 @@ public class ConfirmPaymentCommand implements Command {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
+        if (null == user) {
+            LOG.error("Unauthorized request. Session has ended");
+            throw new AppException(rb.getString("message.you.must.login"));
+        }
         LOG.trace("Logged user: {}", user);
 
         try {

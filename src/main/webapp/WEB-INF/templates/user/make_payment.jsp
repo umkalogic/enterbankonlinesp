@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="../../../static/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../../../static/css/home.css"/>
     <link rel="stylesheet" type="text/css" href="../../../static/css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../static/css/registration.css"/>
+
     <title><fmt:message key="payments.list" /></title>
 </head>
 <body>

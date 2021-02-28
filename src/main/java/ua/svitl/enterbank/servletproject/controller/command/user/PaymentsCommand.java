@@ -37,10 +37,16 @@ public class PaymentsCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
+            LOG.error("Unauthorized request. Session has ended");
+            throw new AppException(rb.getString("message.you.must.login"));
+        }
+        LOG.trace("Logged user: {}", user);
+
         try {
             LOG.debug("Start execute command=payments");
-            User user = (User) session.getAttribute("user");
-            LOG.trace("Logged user: {}", user);
+
             String sortField = request.getParameter("sortfield") == null ? "payment_date" :
                     request.getParameter("sortfield");
             String sortDir = request.getParameter("sortdir") == null ? "desc" : request.getParameter("sortdir");
@@ -54,13 +60,23 @@ public class PaymentsCommand implements Command {
             request.setAttribute("payments", payments);
             ParametersUtils.setPaginationAttributes(request, sortField, sortDir, pageNo, pageSize, payments.size());
 
+            if (request.getParameter("infomessage") != null) {
+                request.setAttribute("infoMessage", request.getParameter("infomessage"));
+            }
+
+            if (request.getParameter("errormessage") != null) {
+                request.setAttribute("errorMessage", request.getParameter("errormessage"));
+            }
+
             LOG.debug("End execute command=payments. Forwarding to... {}", ControllerConstants.PAGE_USER_PAYMENTS);
-            return CommandResult.forward(ControllerConstants.PAGE_USER_PAYMENTS);
+
         } catch (ServiceException ex) {
             LOG.error("Command=payments: error loading user payments");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
-            return CommandResult.forward(ControllerConstants.PAGE_USER_PAYMENTS);
+            request.setAttribute("infoMessage", ex.getMessage());
         }
+
+        return CommandResult.forward(ControllerConstants.PAGE_USER_PAYMENTS);
     }
 
 }

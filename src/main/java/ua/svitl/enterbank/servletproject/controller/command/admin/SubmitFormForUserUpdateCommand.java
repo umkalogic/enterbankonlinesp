@@ -6,6 +6,7 @@ import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerCons
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
+import ua.svitl.enterbank.servletproject.controller.command.utils.UserDataFormErrors;
 import ua.svitl.enterbank.servletproject.model.entity.User;
 import ua.svitl.enterbank.servletproject.model.service.UserService;
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
@@ -35,17 +36,23 @@ public class SubmitFormForUserUpdateCommand implements Command {
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+        UserDataFormErrors formValidationErrors = new UserDataFormErrors();
         Integer id = null;
         try {
             ParametersUtils.checkIfNull(request, "id", rb.getString("cannot.be.null"));
             id = ParametersUtils.getId(request, "id", rb.getString("wrong.id"));
 
-            String userName = ParametersUtils.getString(request, "username",
-                    rb.getString("cannot.be.null"));
-            //todo check username pattern: consist of min 5 letters and start from a letter
+            String userName = formValidationErrors.getValidUsername(request, rb);
 
-            String email = ParametersUtils.getString(request, "email",  rb.getString("cannot.be.null"));
-            //todo check email pattern: should correspond to standard email format
+            String email = formValidationErrors.getValidEmail(request, rb);;
+
+            if (formValidationErrors.getUserNameError() != null
+                    || formValidationErrors.getEmailError() != null) {
+                return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE +
+                        "&id=" + request.getParameter("id") +
+                        "&invalidusername=" + formValidationErrors.getUserNameError() +
+                        "&invalidemail=" +  formValidationErrors.getEmailError());
+            }
 
             String[] isactives = request.getParameterValues("isactive");
             Arrays.stream(isactives).forEach(e -> LOG.debug("ISACTIVES: {}", e));
@@ -68,28 +75,25 @@ public class SubmitFormForUserUpdateCommand implements Command {
             request.setAttribute("infoMessage", rb.getString("user.update.successfull"));
             LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_ADMINHOME);
             return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
-                    "&infomessage" + rb.getString("user.update.successfull"));
+                    "&infomessage=" + rb.getString("user.update.successfull"));
 
         } catch (ServiceException ex) {
             LOG.error("Error loading user by id ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
+            return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE +
+                    "&id=" + request.getParameter("id") +
+                    "&errormessage=" + request.getAttribute("errorMessage") +
+                    "&infomessage=" + request.getAttribute("infoMessage"));
 
         } catch (CommandException ex) {
             LOG.error("Validation error in user update form ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.data"));
             request.setAttribute("infoMessage", ex.getMessage());
-            if (id == null) {
-                return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
-                        "&errormessage=" + request.getAttribute("errorMessage") +
-                        "&infomessage=" + request.getAttribute("infoMessage"));
-            }
+            return CommandResult.redirect(ControllerConstants.COMMAND_ADMINHOME +
+                    "&errormessage=" + request.getAttribute("errorMessage") +
+                    "&infomessage=" + request.getAttribute("infoMessage"));
         }
-
-        return CommandResult.redirect(ControllerConstants.COMMAND_ADMIN_SHOW_FORM_FOR_USER_UPDATE +
-                "&id=" + request.getParameter("id") +
-                "&errormessage=" + request.getAttribute("errorMessage") +
-                "&infomessage" + request.getAttribute("infoMessage"));
 
     }
 }

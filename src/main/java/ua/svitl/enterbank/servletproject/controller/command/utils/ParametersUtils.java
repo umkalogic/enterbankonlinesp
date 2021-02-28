@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 import ua.svitl.enterbank.servletproject.utils.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParametersUtils {
     private static final Logger LOG = LogManager.getLogger(ParametersUtils.class);
@@ -75,4 +78,23 @@ public class ParametersUtils {
             return false;
         }
     }
+
+    public static boolean checkUserName(String userName, String errorMessage) throws CommandException {
+        Pattern pt = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]{4,}");
+        Matcher mt = pt.matcher(userName);
+        if (!mt.find()) {
+            throw new CommandException(errorMessage);
+        }
+        return true;
+    }
+
+    public static boolean checkEmail(String email, String errorMessage) throws CommandException {
+        Pattern pt = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_.]{0,50}[@][a-zA-Z][a-zA-Z0-9_]{0,50}[.][a-z]{2,4}");
+        Matcher mt = pt.matcher(email);
+        if (!mt.find()) {
+            throw new CommandException(errorMessage);
+        }
+        return true;
+    }
+
 }

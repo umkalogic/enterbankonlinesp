@@ -35,15 +35,13 @@ public class UserHomeCommand implements Command {
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
         if (null == user) {
-            request.setAttribute("errorMessage", "Session has ended.  Please login.");
-            request.setAttribute("infoMessage", "You must login to enter this page");
-            throw new AppException("You must login to enter this page");
+            LOG.error("Unauthorized request. Session has ended");
+            throw new AppException(rb.getString("message.you.must.login"));
         }
+        LOG.trace("Logged user: {}", user);
 
         try {
             LOG.debug("Start execute command");
-
-            LOG.trace("Logged user: {}", user);
 
             String sortField = request.getParameter("sortfield") == null ? "bank_account_number" :
                     request.getParameter("sortfield");
@@ -74,8 +72,10 @@ public class UserHomeCommand implements Command {
             LOG.error("UserHome: error loading user home page");
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
-            //todo make redirect with info/error/message params
-            return CommandResult.forward(ControllerConstants.PAGE_USER_HOME);
+            LOG.debug("Redirecting to ==> {}", ControllerConstants.COMMAND_USERHOME);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME +
+                    "&errormessage=" + request.getAttribute("errorMessage") +
+                    "&infomessage=" + request.getAttribute("infoMessage"));
         }
     }
 }

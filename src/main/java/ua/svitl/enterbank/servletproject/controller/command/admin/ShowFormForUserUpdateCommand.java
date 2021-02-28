@@ -51,6 +51,22 @@ public class ShowFormForUserUpdateCommand implements Command {
 
             request.setAttribute("theuser", user.get());
 
+            if (request.getParameter("infomessage") != null) {
+                request.setAttribute("infoMessage", request.getParameter("infomessage"));
+            }
+
+            if (request.getParameter("errormessage") != null) {
+                request.setAttribute("errorMessage", request.getParameter("errormessage"));
+            }
+
+            if (request.getParameter("invalidusername") != null) {
+                request.setAttribute("invalidUsername", request.getParameter("invalidusername"));
+            }
+
+            if (request.getParameter("invalidemail") != null) {
+                request.setAttribute("invalidEmail", request.getParameter("invalidemail"));
+            }
+
             LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_UPDATE_USER);
             return CommandResult.forward(ControllerConstants.PAGE_ADMIN_UPDATE_USER);
 

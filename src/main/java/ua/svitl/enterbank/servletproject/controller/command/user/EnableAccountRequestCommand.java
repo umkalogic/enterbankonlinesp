@@ -34,6 +34,10 @@ public class EnableAccountRequestCommand implements Command {
         HttpSession session = request.getSession();
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
         User user = (User) session.getAttribute("user");
+        if (null == user) {
+            LOG.error("Unauthorized request. Session has ended");
+            throw new AppException(rb.getString("message.you.must.login"));
+        }
         LOG.trace("Logged user: {}", user);
         try {
             LOG.debug("Start enable account request command: account id={}", request.getParameter("id"));
@@ -42,6 +46,9 @@ public class EnableAccountRequestCommand implements Command {
             int id = ParametersUtils.getId(request, "id", "wrong.id");
 
             bankAccountService.updateAccountEnableRequest(user, id);
+
+            LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
+            return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
 
         } catch (ServiceException ex) {
             LOG.error("Error loading account by id");
@@ -53,8 +60,9 @@ public class EnableAccountRequestCommand implements Command {
             request.setAttribute("infoMessage", ex.getMessage());
         }
 
-        LOG.debug("Redirecting to... {}", ControllerConstants.COMMAND_USERHOME);
-        //todo add params error/info/message
-        return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME);
+        LOG.debug("Redirecting to ==> {}", ControllerConstants.COMMAND_USERHOME);
+        return CommandResult.redirect(ControllerConstants.COMMAND_USERHOME +
+                "&errormessage=" + request.getAttribute("errorMessage") +
+                "&infomessage=" + request.getAttribute("infoMessage"));
     }
 }

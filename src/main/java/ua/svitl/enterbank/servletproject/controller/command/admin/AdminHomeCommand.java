@@ -2,16 +2,15 @@ package ua.svitl.enterbank.servletproject.controller.command.admin;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.Command;
 import ua.svitl.enterbank.servletproject.controller.command.CommandResult;
+import ua.svitl.enterbank.servletproject.controller.command.utils.ControllerConstants;
 import ua.svitl.enterbank.servletproject.controller.command.utils.ParametersUtils;
-import ua.svitl.enterbank.servletproject.model.entity.User;
-import ua.svitl.enterbank.servletproject.utils.exception.AppException;
-import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 import ua.svitl.enterbank.servletproject.model.dto.UserPersonDataDto;
 import ua.svitl.enterbank.servletproject.model.service.UserService;
+import ua.svitl.enterbank.servletproject.utils.exception.AppException;
 import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
+import ua.svitl.enterbank.servletproject.utils.resource.ResourcesBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,14 +33,8 @@ public class AdminHomeCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request, HttpServletResponse response) throws AppException {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (null == user) {
-            request.setAttribute("errorMessage", "Session has ended.  Please login.");
-            request.setAttribute("infoMessage", "You must login to enter this page");
-            throw new AppException("You must login to enter this page");
-        }
-
         ResourceBundle rb = ResourcesBundle.getResourceBundle(session);
+
         try {
             int pageSize = ControllerConstants.PAGE_SIZE;
             List<UserPersonDataDto> userList =
@@ -59,14 +52,15 @@ public class AdminHomeCommand implements Command {
                 request.setAttribute("errorMessage", request.getParameter("errormessage"));
             }
 
-            LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_HOME);
-            return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
         } catch (ServiceException ex) {
-            LOG.error("AdminHome: error loading admin home page");
+            LOG.error("AdminHome: error query in DB ==> {}", ex.getMessage());
             request.setAttribute("errorMessage", rb.getString("label.error.loading.data"));
             request.setAttribute("infoMessage", ex.getMessage());
-            return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
         }
+
+        LOG.debug("Forwarding to... {}", ControllerConstants.PAGE_ADMIN_HOME);
+        return CommandResult.forward(ControllerConstants.PAGE_ADMIN_HOME);
+
     }
 
     @Override
