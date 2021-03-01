@@ -1,10 +1,10 @@
 Java Servlet Web Application JDBC Mysql JSP JSTL Bootstrap Enterbank24
 ========
-###Final Project
+###Final Project###
 
-###Svitlana Serebriakova, 2021
+###Svitlana Serebriakova, 2021###
 
-See "How to.txt" to set up and run web app.
+See "How to.txt" to set up and run web app
 ------------------------------------------
 Платежі
 =========
