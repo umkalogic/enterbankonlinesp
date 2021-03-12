@@ -1,6 +1,6 @@
 package ua.svitl.enterbank.servletproject.utils.exception;
 
-public class DaoException extends Exception {
+public class DaoException extends RuntimeException {
     private static final long serialVersionUID = 1435767695053005139L;
 
     public DaoException() {

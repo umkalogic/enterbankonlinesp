@@ -1,6 +1,6 @@
 package ua.svitl.enterbank.servletproject.utils.exception;
 
-public class ServiceException extends Exception {
+public class ServiceException extends RuntimeException {
     private static final long serialVersionUID = 2352441974767357010L;
 
     public ServiceException() {

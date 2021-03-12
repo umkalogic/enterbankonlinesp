@@ -11,17 +11,8 @@ public abstract class AbstractDaoFactory implements Serializable {
     private static AbstractDaoFactory daoFactory;
 
     public abstract UserDao createUserDao() throws DaoException;
-    public abstract PersonDao createPersonDao() throws DaoException;
-    public abstract RoleDao createRoleDao() throws DaoException;
-    public abstract PhoneNumberDao createPhoneNumberDao() throws DaoException;
-    public abstract PassportDataDao createPassportDataDao() throws DaoException;
     public abstract BankAccountDao createBankAccountDao() throws DaoException;
-    public abstract CreditCardDao createCreditCardDao() throws DaoException;
     public abstract PaymentDao createPaymentDao() throws DaoException;
-    public abstract AddressDao createAddressDao() throws DaoException ;
-    public abstract UkraineRegionsDao createUkraineRegionsDao() throws DaoException;
-
-    public abstract PersonAddressesDao createPersonAddressesDao() throws DaoException;
 
     public static synchronized AbstractDaoFactory getInstance(){
         if (daoFactory == null) {

@@ -1,7 +1,6 @@
 package ua.svitl.enterbank.servletproject.controller.command;
 
 import ua.svitl.enterbank.servletproject.utils.exception.AppException;
-import ua.svitl.enterbank.servletproject.utils.exception.ServiceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

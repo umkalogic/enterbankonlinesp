@@ -20,8 +20,8 @@ public class LogoutCommand implements Command {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
-            session.removeAttribute("user");
-            session.removeAttribute("role");
+//            session.removeAttribute("user");
+//            session.removeAttribute("role");
             LOG.debug("Session invalidates");
             session.invalidate();
         }
